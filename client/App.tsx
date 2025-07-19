@@ -1,0 +1,113 @@
+import "./global.css";
+
+import React, { useState, useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { createRoot } from "react-dom/client";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { SocketProvider } from "@/contexts/SocketContext";
+import ErrorBoundary from "@/components/ErrorBoundary";
+
+import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
+import LoginPage from "./pages/Login";
+import RegisterPage from "./pages/Register";
+import LandingPage from "./pages/LandingPage";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        // Don't retry on 401/403 errors
+        if (error && typeof error === "object" && "status" in error) {
+          const status = (error as any).status;
+          if (status === 401 || status === 403) {
+            return false;
+          }
+        }
+        return failureCount < 3;
+      },
+    },
+  },
+});
+
+function AuthenticatedApp() {
+  const { user, isLoading } = useAuth();
+  const [currentView, setCurrentView] = useState<
+    "landing" | "login" | "register"
+  >("landing");
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    if (currentView === "login") {
+      return (
+        <div className="min-h-screen">
+          <LoginPage onSwitchToRegister={() => setCurrentView("register")} />
+        </div>
+      );
+    }
+
+    if (currentView === "register") {
+      return (
+        <div className="min-h-screen">
+          <RegisterPage onSwitchToLogin={() => setCurrentView("login")} />
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen">
+        <LandingPage
+          onLogin={() => setCurrentView("login")}
+          onRegister={() => setCurrentView("register")}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <SocketProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SocketProvider>
+    </ErrorBoundary>
+  );
+}
+
+const App = () => (
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <AuthenticatedApp />
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
+);
+
+createRoot(document.getElementById("root")!).render(<App />);
