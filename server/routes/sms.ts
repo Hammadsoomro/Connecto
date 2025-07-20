@@ -53,23 +53,23 @@ export const sendSMS: RequestHandler = async (req, res) => {
   }
 };
 
-export const getMessages: RequestHandler = (req, res) => {
+export const getMessages: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { contactId } = req.params;
 
     if (contactId) {
       // Get messages for specific contact
-      const contact = db.getContactById(contactId);
+      const contact = await db.getContactById(contactId);
       if (!contact || contact.userId !== userId) {
         return res.status(404).json({ error: "Contact not found" });
       }
 
-      const messages = db.getMessagesByContactId(contactId);
+      const messages = await db.getMessagesByContactId(contactId);
       res.json(messages);
     } else {
       // Get all messages for user
-      const messages = db.getMessagesByUserId(userId);
+      const messages = await db.getMessagesByUserId(userId);
       res.json(messages);
     }
   } catch (error) {
