@@ -21,9 +21,11 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(3);
   const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
