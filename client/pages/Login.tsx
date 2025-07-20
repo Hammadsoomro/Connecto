@@ -10,7 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
-import { AlertCircle, MessageSquare, ArrowLeft } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { AlertCircle, MessageSquare, ArrowLeft, Moon, Sun } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface LoginPageProps {
