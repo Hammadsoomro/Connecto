@@ -49,7 +49,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Navigation */}
+            {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
         <div className="flex items-center space-x-2">
           <div className="relative">
@@ -58,6 +58,18 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
           </div>
           <span className="text-2xl font-bold text-white">Connectlify</span>
         </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="text-white hover:bg-white/10"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
+        </Button>
       </nav>
 
       {/* Login Form */}
