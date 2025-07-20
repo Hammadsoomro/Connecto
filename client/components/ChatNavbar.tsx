@@ -77,8 +77,8 @@ export default function ChatNavbar({
           <Menu className="h-4 w-4" />
         </Button>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="relative">
               <MessageSquare className="h-7 w-7 text-purple-600" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
@@ -86,7 +86,7 @@ export default function ChatNavbar({
             <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Connectlify
             </span>
-          </div>
+          </Link>
 
           {unreadCount > 0 && (
             <Badge
