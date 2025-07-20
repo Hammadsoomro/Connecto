@@ -105,12 +105,12 @@ export const markMessageAsRead: RequestHandler = async (req, res) => {
 };
 
 // Webhook endpoint for receiving SMS from Twilio
-export const receiveSMS: RequestHandler = (req, res) => {
+export const receiveSMS: RequestHandler = async (req, res) => {
   try {
     const { From, To, Body, MessageSid } = req.body;
 
     // Find the phone number and user
-    const phoneNumber = db.getPhoneNumberByNumber(To);
+    const phoneNumber = await db.getPhoneNumberByNumber(To);
     if (!phoneNumber) {
       console.error("Received SMS for unknown number:", To);
       return res.status(404).send("Number not found");
@@ -119,16 +119,16 @@ export const receiveSMS: RequestHandler = (req, res) => {
     const userId = phoneNumber.userId;
 
     // Find or create contact
-    let contact = db.getContactByPhoneNumber(userId, From);
+    let contact = await db.getContactByPhoneNumber(userId, From);
     if (!contact) {
-      contact = db.createContact(userId, {
+      contact = await db.createContact(userId, {
         name: From, // Use phone number as name initially
         phoneNumber: From,
       });
     }
 
     // Save message
-    const message = db.createMessage({
+    const message = await db.createMessage({
       userId,
       contactId: contact.id,
       fromNumber: From,
