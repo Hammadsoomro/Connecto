@@ -92,9 +92,31 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
             <CardDescription className="text-gray-300">
               Create your account to start sending SMS
             </CardDescription>
-          </CardHeader>
+                    </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {success ? (
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-8 w-8 text-green-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Account Created Successfully!</h3>
+                  <p className="text-gray-300 mb-4">
+                    Welcome to Connectlify! Your account has been created successfully.
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Redirecting to login page in {countdown} seconds...
+                  </p>
+                </div>
+                <Button
+                  onClick={onSwitchToLogin}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
+                >
+                  Go to Login Now
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-white">
                   Full Name
