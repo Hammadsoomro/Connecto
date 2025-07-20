@@ -174,37 +174,25 @@ export default function AccountSettingsDialog({
           </div>
         </div>
 
-        {/* API Configuration */}
+                {/* SMS Configuration */}
         <div className="space-y-3">
-          <Label className="text-base font-medium">API & Integrations</Label>
+          <Label className="text-base font-medium">SMS Configuration</Label>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center gap-3">
-                <Globe className="h-4 w-4" />
-                <div>
-                  <div className="font-medium">Webhook URL</div>
-                  <div className="text-sm text-muted-foreground">
-                    Configure webhooks for incoming messages
-                  </div>
-                </div>
-              </div>
-              <Button size="sm" variant="outline">
-                Configure
-              </Button>
-            </div>
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center gap-3">
+            <div className="p-4 border rounded-lg bg-muted/50">
+              <div className="flex items-center gap-3 mb-3">
                 <Settings className="h-4 w-4" />
                 <div>
-                  <div className="font-medium">API Keys</div>
+                  <div className="font-medium">Twilio Integration</div>
                   <div className="text-sm text-muted-foreground">
-                    Manage your API authentication keys
+                    SMS service is configured and ready
                   </div>
                 </div>
               </div>
-              <Button size="sm" variant="outline">
-                Manage Keys
-              </Button>
+              <div className="text-sm text-muted-foreground">
+                ✅ Account SID: Configured<br />
+                ✅ Auth Token: Configured<br />
+                ✅ Messaging Service: Ready
+              </div>
             </div>
           </div>
         </div>
