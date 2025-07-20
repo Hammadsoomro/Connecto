@@ -191,17 +191,18 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
               >
                 {isLoading ? "Creating account..." : "Create Account"}
               </Button>
-            </form>
+                          </form>
 
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={onSwitchToLogin}
-                className="text-purple-300 hover:text-purple-200"
-              >
-                Already have an account? Sign in
-              </Button>
-            </div>
+              <div className="mt-6 text-center">
+                <Button
+                  variant="link"
+                  onClick={onSwitchToLogin}
+                  className="text-purple-300 hover:text-purple-200"
+                >
+                  Already have an account? Sign in
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
