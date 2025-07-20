@@ -22,8 +22,9 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
   const [email, setEmail] = useState("demo@example.com");
   const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+    const [error, setError] = useState("");
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
