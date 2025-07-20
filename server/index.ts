@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer as createHttpServer } from "http";
 import { Server } from "socket.io";
-import { handleDemo } from "./routes/demo";
+
 import { register, login, authenticateToken } from "./routes/auth";
 import {
   sendSMS,
@@ -44,7 +44,7 @@ export function createExpressApp() {
     res.json({ message: "Hello from Express server v2!" });
   });
 
-  app.get("/api/demo", handleDemo);
+  
 
   // Auth routes
   app.post("/api/auth/register", register);
