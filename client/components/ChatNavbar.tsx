@@ -205,12 +205,20 @@ export default function ChatNavbar({
             </div>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem
-              onClick={() => setIsSettingsOpen(true)}
+                        <DropdownMenuItem
+              onClick={() => setIsProfileSettingsOpen(true)}
               className="cursor-pointer"
             >
               <Settings className="h-4 w-4 mr-2" />
               Profile Settings
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              onClick={() => setIsAccountSettingsOpen(true)}
+              className="cursor-pointer"
+            >
+              <Phone className="h-4 w-4 mr-2" />
+              Account Settings
             </DropdownMenuItem>
 
             <DropdownMenuItem
