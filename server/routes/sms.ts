@@ -78,12 +78,12 @@ export const getMessages: RequestHandler = async (req, res) => {
   }
 };
 
-export const markMessageAsRead: RequestHandler = (req, res) => {
+export const markMessageAsRead: RequestHandler = async (req, res) => {
   try {
     const { messageId } = req.params;
     const userId = req.user!.id;
 
-    const message = db.updateMessage(messageId, { isRead: true });
+    const message = await db.updateMessage(messageId, { isRead: true });
     if (!message || message.userId !== userId) {
       return res.status(404).json({ error: "Message not found" });
     }
