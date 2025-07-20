@@ -30,7 +30,7 @@ import {
   updateSubAccount,
   deleteSubAccount,
 } from "./routes/sub-accounts";
-import { testTwilio } from "./routes/test-twilio";
+
 import { db } from "./database";
 
 export function createExpressApp() {
