@@ -250,11 +250,18 @@ export default function ChatNavbar({
         </DropdownMenu>
       </div>
 
-      {/* Settings Dialog */}
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <SettingsDialog
+            {/* Profile Settings Dialog */}
+      <Dialog open={isProfileSettingsOpen} onOpenChange={setIsProfileSettingsOpen}>
+        <ProfileSettingsDialog
+          onClose={() => setIsProfileSettingsOpen(false)}
+        />
+      </Dialog>
+
+      {/* Account Settings Dialog */}
+      <Dialog open={isAccountSettingsOpen} onOpenChange={setIsAccountSettingsOpen}>
+        <AccountSettingsDialog
           phoneNumbers={phoneNumbers}
-          onClose={() => setIsSettingsOpen(false)}
+          onClose={() => setIsAccountSettingsOpen(false)}
         />
       </Dialog>
 
