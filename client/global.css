@@ -94,15 +94,29 @@
     @apply border-border;
   }
 
-  body {
-    @apply text-foreground;
+    body {
+    @apply text-foreground bg-background;
+    min-height: 100vh;
+  }
+
+  /* Light theme gradient pages */
+  .light .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      rgb(241, 245, 249),
+      rgb(196, 181, 253),
+      rgb(241, 245, 249)
+    );
+  }
+
+  /* Dark theme gradient pages */
+  .dark .gradient-bg {
     background: linear-gradient(
       135deg,
       rgb(15, 23, 42),
       rgb(88, 28, 135),
       rgb(15, 23, 42)
     );
-    min-height: 100vh;
   }
 }
 
