@@ -18,16 +18,21 @@ export const useTheme = () => {
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    // Check localStorage first
-    const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") {
-      return saved;
+    const [theme, setTheme] = useState<"light" | "dark">(() => {
+    try {
+      // Check localStorage first
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") {
+        return saved;
+      }
+      // Fallback to system preference
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    } catch {
+      // Fallback for SSR or localStorage issues
+      return "dark";
     }
-    // Fallback to system preference
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
   });
 
   useEffect(() => {
