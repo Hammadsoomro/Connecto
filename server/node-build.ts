@@ -1,9 +1,11 @@
 import path from "path";
 import { createServer } from "./index";
 import express from "express";
+import { db } from "./database";
 
-const httpServer = createServer();
-const port = process.env.PORT || 3000;
+async function startServer() {
+  const httpServer = await createServer();
+  const port = process.env.PORT || 3000;
 
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
