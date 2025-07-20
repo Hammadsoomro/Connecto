@@ -42,9 +42,11 @@ export function createExpressApp() {
   app.use(express.urlencoded({ extended: true }));
 
   // Public routes
-  app.get("/api/ping", (_req, res) => {
+    app.get("/api/ping", (_req, res) => {
     res.json({ message: "Hello from Express server v2!" });
   });
+
+  app.get("/api/test-twilio", testTwilio);
 
   
 
