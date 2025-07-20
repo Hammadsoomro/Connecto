@@ -80,14 +80,13 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="contact-name">Name</Label>
+                <div className="space-y-2">
+          <Label htmlFor="contact-name">Name (Optional)</Label>
           <Input
             id="contact-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="John Doe"
-            required
+            placeholder="John Doe (will use phone number if empty)"
           />
         </div>
 
