@@ -36,7 +36,7 @@ export default function Index() {
           Watch the chat on the left for updates that might need your attention
           to finish generating
         </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
+        
       </div>
     </div>
   );
