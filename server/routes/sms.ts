@@ -8,14 +8,14 @@ export const sendSMS: RequestHandler = async (req, res) => {
     const { contactId, body, fromNumber } = req.body as SendSmsRequest;
     const userId = req.user!.id;
 
-    // Get contact
-    const contact = db.getContactById(contactId);
+        // Get contact
+    const contact = await db.getContactById(contactId);
     if (!contact || contact.userId !== userId) {
       return res.status(404).json({ error: "Contact not found" });
     }
 
     // Verify user owns the from number
-    const phoneNumber = db.getPhoneNumberByNumber(fromNumber);
+    const phoneNumber = await db.getPhoneNumberByNumber(fromNumber);
     if (!phoneNumber || phoneNumber.userId !== userId) {
       return res.status(400).json({ error: "Invalid from number" });
     }
