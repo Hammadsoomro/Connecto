@@ -49,8 +49,16 @@ export default function Dashboard() {
       if (!response.ok) throw new Error("Failed to fetch phone numbers");
       return response.json() as Promise<PhoneNumber[]>;
     },
-        enabled: !!token,
+                enabled: !!token,
   });
+
+  // Set default selected phone number to primary or first available
+  useEffect(() => {
+    if (!selectedPhoneNumber && phoneNumbers.length > 0) {
+      const primary = phoneNumbers.find((num) => num.isPrimary) || phoneNumbers[0];
+      setSelectedPhoneNumber(primary);
+    }
+  }, [phoneNumbers, selectedPhoneNumber]);
 
   // Fetch unread count
   const { data: unreadData } = useQuery({
