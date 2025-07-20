@@ -140,14 +140,16 @@ export default function Dashboard() {
         onNotificationMessageClick={handleNotificationMessageClick}
       />
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Contact List Sidebar */}
+            <div className="flex-1 flex overflow-hidden">
+        {/* Contact List Sidebar - Always visible on desktop, overlay on mobile */}
         <div
           className={cn(
             "w-80 border-r bg-background",
-            "lg:block",
-            isMobileContactListOpen ? "block" : "hidden",
+            "block", // Always show on desktop
             "lg:relative absolute lg:z-auto z-10 h-full lg:h-auto",
+            // On mobile, show/hide based on state
+            "lg:translate-x-0 transition-transform duration-300",
+            isMobileContactListOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           )}
         >
           <ContactList
