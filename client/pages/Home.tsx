@@ -69,18 +69,25 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+      </div>
+
       {/* Navigation Bar */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="relative z-10 border-b border-white/10 bg-black/20 backdrop-blur supports-[backdrop-filter]:bg-black/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2">
+              <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                 <div className="relative">
                   <MessageSquare className="h-8 w-8 text-primary" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
                 </div>
-                <span className="text-2xl font-bold text-foreground">Connectlify</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Connectlify</span>
               </Link>
             </div>
             
@@ -89,7 +96,7 @@ export default function Home() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="h-9 w-9"
+                className="h-9 w-9 text-white hover:bg-white/10"
               >
                 {theme === "dark" ? (
                   <Sun className="h-4 w-4" />
@@ -98,12 +105,12 @@ export default function Home() {
                 )}
               </Button>
               
-              <div className="flex items-center space-x-2">
-                <User className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center space-x-2 text-white">
+                <User className="h-4 w-4" />
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
               
-              <Button variant="outline" onClick={logout} className="flex items-center space-x-2">
+              <Button variant="outline" onClick={logout} className="flex items-center space-x-2 border-white/20 text-white hover:bg-white/10">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </Button>
@@ -113,35 +120,35 @@ export default function Home() {
       </nav>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-white mb-4 animate-fade-in">
             Welcome back, {user?.name}!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-300 text-lg animate-fade-in-delay">
             Manage your SMS communications and phone numbers from your dashboard.
           </p>
         </div>
 
         {/* Main Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-slide-up">
           {mainFeatures.map((feature) => {
             const Icon = feature.icon;
             return (
               <Link key={feature.title} to={feature.href}>
-                <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer h-full">
-                  <CardHeader className="pb-4">
-                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200`}>
-                      <Icon className="h-6 w-6 text-white" />
+                <Card className="group hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer h-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/15">
+                  <CardHeader className="pb-3 text-center">
+                    <div className={`w-10 h-10 mx-auto rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200`}>
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
+                    <CardTitle className="text-sm font-semibold text-white">{feature.title}</CardTitle>
+                    <CardDescription className="text-xs text-gray-300 line-clamp-2">{feature.description}</CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="flex items-center text-sm text-primary group-hover:translate-x-1 transition-transform duration-200">
-                      <span>Get started</span>
-                      <ChevronRight className="h-4 w-4 ml-1" />
+                  <CardContent className="pt-0 text-center">
+                    <div className="flex items-center justify-center text-xs text-purple-300 group-hover:translate-x-1 transition-transform duration-200">
+                      <span>Open</span>
+                      <ChevronRight className="h-3 w-3 ml-1" />
                     </div>
                   </CardContent>
                 </Card>
@@ -151,22 +158,22 @@ export default function Home() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mb-8 animate-slide-up-delay">
+          <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
-                  <Card className="group hover:shadow-md transition-all duration-200 cursor-pointer">
-                    <CardContent className="flex items-center p-4">
-                      <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center mr-4 group-hover:bg-primary/10 transition-colors">
-                        <Icon className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+                  <Card className="group hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-200 cursor-pointer bg-white/5 backdrop-blur-sm border border-white/10 text-white hover:bg-white/10">
+                    <CardContent className="flex items-center p-3">
+                      <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mr-3 group-hover:bg-purple-500/20 transition-colors">
+                        <Icon className="h-4 w-4 text-gray-300 group-hover:text-purple-300" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-medium text-foreground">{action.title}</h3>
+                        <h3 className="font-medium text-sm text-white">{action.title}</h3>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-200" />
+                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-purple-300 group-hover:translate-x-1 transition-all duration-200" />
                     </CardContent>
                   </Card>
                 </Link>
@@ -176,38 +183,38 @@ export default function Home() {
         </div>
 
         {/* Features Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-float">
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-6 w-6 text-blue-400" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Fast & Reliable</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-white mb-2">Fast & Reliable</h3>
+              <p className="text-sm text-gray-300">
                 Send SMS messages instantly with 99.9% delivery rate
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white animate-float-delay">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Secure</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-white mb-2">Secure</h3>
+              <p className="text-sm text-gray-300">
                 End-to-end encryption and secure message handling
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
-                <Globe className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-6 w-6 text-purple-400" />
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Global Reach</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-white mb-2">Global Reach</h3>
+              <p className="text-sm text-gray-300">
                 Send messages worldwide with local numbers
               </p>
             </CardContent>
