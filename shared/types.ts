@@ -10,6 +10,8 @@ export interface SubAccount {
   id: string;
   userId: string;
   name: string;
+  friendlyName: string;
+  status: string;
   assignedNumber?: string;
   createdAt: Date;
   updatedAt: Date;
