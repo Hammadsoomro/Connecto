@@ -26,7 +26,19 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [countdown, setCountdown] = useState(3);
-  const { register } = useAuth();
+    const { register } = useAuth();
+
+  // Countdown effect for redirect
+  useEffect(() => {
+    if (success && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (success && countdown === 0) {
+      onSwitchToLogin();
+    }
+  }, [success, countdown, onSwitchToLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
