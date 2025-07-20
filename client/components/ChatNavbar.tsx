@@ -173,10 +173,10 @@ export default function ChatNavbar({
         </Button>
 
         {/* Settings */}
-        <Button
+                <Button
           variant="ghost"
           size="icon"
-          onClick={() => setIsSettingsOpen(true)}
+          onClick={() => setIsAccountSettingsOpen(true)}
           className="hidden sm:flex"
         >
           <Settings className="h-4 w-4" />
