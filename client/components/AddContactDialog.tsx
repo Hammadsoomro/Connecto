@@ -23,12 +23,14 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phoneNumber.trim()) return;
+    if (!phoneNumber.trim()) return;
 
     setIsLoading(true);
     try {
+      const contactName = name.trim() || phoneNumber.trim(); // Use phone number as name if name is empty
+
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {
@@ -36,7 +38,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: name.trim(),
+          name: contactName,
           phoneNumber: phoneNumber.trim(),
         }),
       });
