@@ -26,8 +26,9 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [countdown, setCountdown] = useState(3);
+    const [countdown, setCountdown] = useState(3);
   const { register } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   // Countdown effect for redirect
   useEffect(() => {
