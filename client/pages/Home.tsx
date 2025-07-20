@@ -68,17 +68,17 @@ export default function Home() {
     }
   ];
 
-    return (
-    <div className="min-h-screen gradient-bg">
+  return (
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' : 'bg-gradient-to-br from-slate-50 via-purple-100 to-slate-50'}`}>
       {/* Animated background elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${theme === 'dark' ? 'bg-purple-500/10' : 'bg-purple-500/20'} rounded-full blur-3xl animate-pulse`}></div>
+        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 ${theme === 'dark' ? 'bg-blue-500/10' : 'bg-blue-500/20'} rounded-full blur-3xl animate-pulse delay-1000`}></div>
+        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 ${theme === 'dark' ? 'bg-pink-500/10' : 'bg-pink-500/20'} rounded-full blur-3xl animate-pulse delay-500`}></div>
       </div>
 
-            {/* Navigation Bar */}
-      <nav className="relative z-10 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      {/* Navigation Bar */}
+      <nav className={`relative z-10 border-b ${theme === 'dark' ? 'border-white/10 bg-black/20' : 'border-black/10 bg-white/20'} backdrop-blur supports-[backdrop-filter]:${theme === 'dark' ? 'bg-black/30' : 'bg-white/30'}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -87,7 +87,7 @@ export default function Home() {
                   <MessageSquare className="h-8 w-8 text-primary" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
                 </div>
-                                <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Connectlify</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Connectlify</span>
               </Link>
             </div>
             
@@ -96,7 +96,7 @@ export default function Home() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="h-9 w-9 text-white hover:bg-white/10"
+                className={`h-9 w-9 ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-black hover:bg-black/10'}`}
               >
                 {theme === "dark" ? (
                   <Sun className="h-4 w-4" />
@@ -105,12 +105,16 @@ export default function Home() {
                 )}
               </Button>
               
-              <div className="flex items-center space-x-2 text-white">
+              <div className={`flex items-center space-x-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                 <User className="h-4 w-4" />
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
               
-              <Button variant="outline" onClick={logout} className="flex items-center space-x-2 border-white/20 text-white hover:bg-white/10">
+              <Button 
+                variant="outline" 
+                onClick={logout} 
+                className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-black/20 text-black hover:bg-black/10'}`}
+              >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </Button>
@@ -123,10 +127,10 @@ export default function Home() {
       <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4 animate-fade-in">
+          <h1 className={`text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-4 animate-fade-in`}>
             Welcome back, {user?.name}!
           </h1>
-          <p className="text-gray-300 text-lg animate-fade-in-delay">
+          <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'} text-lg animate-fade-in-delay`}>
             Manage your SMS communications and phone numbers from your dashboard.
           </p>
         </div>
@@ -153,14 +157,14 @@ export default function Home() {
 
         {/* Quick Actions - Button Style */}
         <div className="mb-8 animate-slide-up-delay">
-          <h2 className="text-xl font-semibold text-white mb-4 text-center">Quick Actions</h2>
+          <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-4 text-center`}>Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
                   <Button 
-                    className="w-full h-auto p-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center space-x-3 transition-all duration-200 hover:scale-105"
+                    className={`w-full h-auto p-4 ${theme === 'dark' ? 'bg-white/10 hover:bg-white/20 text-white border-white/20' : 'bg-black/5 hover:bg-black/10 text-black border-black/20'} border flex items-center space-x-3 transition-all duration-200 hover:scale-105`}
                   >
                     <Icon className="h-5 w-5" />
                     <span className="font-medium">{action.title}</span>
@@ -174,37 +178,37 @@ export default function Home() {
 
         {/* Features Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-float max-w-4xl mx-auto">
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white">
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
             <CardContent className="p-6 text-center">
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-6 w-6 text-blue-400" />
               </div>
-              <h3 className="font-semibold text-white mb-2">Fast & Reliable</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Fast & Reliable</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
                 Send SMS messages instantly with 99.9% delivery rate
               </p>
             </CardContent>
           </Card>
           
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white animate-float-delay">
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm animate-float-delay`}>
             <CardContent className="p-6 text-center">
               <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className="font-semibold text-white mb-2">Secure</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Secure</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
                 End-to-end encryption and secure message handling
               </p>
             </CardContent>
           </Card>
           
-          <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white">
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
             <CardContent className="p-6 text-center">
               <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
                 <Globe className="h-6 w-6 text-purple-400" />
               </div>
-              <h3 className="font-semibold text-white mb-2">Global Reach</h3>
-              <p className="text-sm text-gray-300">
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Global Reach</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
                 Send messages worldwide with local numbers
               </p>
             </CardContent>
