@@ -122,19 +122,19 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
   }
 };
 
-export const deleteSubAccount: RequestHandler = (req, res) => {
+export const deleteSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { subAccountId } = req.params;
 
     // Check if sub-account exists and belongs to user
-    const subAccounts = db.getSubAccountsByUserId(userId);
+    const subAccounts = await db.getSubAccountsByUserId(userId);
     const subAccount = subAccounts.find((sub) => sub.id === subAccountId);
     if (!subAccount) {
       return res.status(404).json({ error: "Sub-account not found" });
     }
 
-    const deleted = db.deleteSubAccount(subAccountId);
+    const deleted = await db.deleteSubAccount(subAccountId);
     if (!deleted) {
       return res.status(500).json({ error: "Failed to delete sub-account" });
     }
