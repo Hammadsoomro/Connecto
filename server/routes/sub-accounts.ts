@@ -13,20 +13,20 @@ export const getSubAccounts: RequestHandler = async (req, res) => {
   }
 };
 
-export const createSubAccount: RequestHandler = (req, res) => {
+export const createSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { name, assignedNumber } = req.body as CreateSubAccountRequest;
 
     // Check if user already has 3 sub-accounts
-    const existingSubAccounts = db.getSubAccountsByUserId(userId);
+    const existingSubAccounts = await db.getSubAccountsByUserId(userId);
     if (existingSubAccounts.length >= 3) {
       return res.status(400).json({ error: "Maximum 3 sub-accounts allowed" });
     }
 
     // Validate assigned number belongs to user if provided
     if (assignedNumber) {
-      const phoneNumbers = db.getPhoneNumbersByUserId(userId);
+      const phoneNumbers = await db.getPhoneNumbersByUserId(userId);
       const phoneExists = phoneNumbers.some(
         (p) => p.phoneNumber === assignedNumber,
       );
@@ -47,7 +47,7 @@ export const createSubAccount: RequestHandler = (req, res) => {
       }
     }
 
-    const subAccount = db.createSubAccount(userId, { name, assignedNumber });
+    const subAccount = await db.createSubAccount(userId, { name, assignedNumber, friendlyName: name, status: "active" });
 
     // Emit to Socket.IO for real-time updates
     const io = req.app.get("io");
