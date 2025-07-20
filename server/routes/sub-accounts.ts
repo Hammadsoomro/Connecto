@@ -62,14 +62,14 @@ export const createSubAccount: RequestHandler = async (req, res) => {
   }
 };
 
-export const updateSubAccount: RequestHandler = (req, res) => {
+export const updateSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { subAccountId } = req.params;
     const { name, assignedNumber } = req.body;
 
     // Check if sub-account exists and belongs to user
-    const subAccounts = db.getSubAccountsByUserId(userId);
+    const subAccounts = await db.getSubAccountsByUserId(userId);
     const subAccount = subAccounts.find((sub) => sub.id === subAccountId);
     if (!subAccount) {
       return res.status(404).json({ error: "Sub-account not found" });
@@ -77,7 +77,7 @@ export const updateSubAccount: RequestHandler = (req, res) => {
 
     // Validate assigned number if provided
     if (assignedNumber) {
-      const phoneNumbers = db.getPhoneNumbersByUserId(userId);
+      const phoneNumbers = await db.getPhoneNumbersByUserId(userId);
       const phoneExists = phoneNumbers.some(
         (p) => p.phoneNumber === assignedNumber,
       );
@@ -104,7 +104,7 @@ export const updateSubAccount: RequestHandler = (req, res) => {
     if (assignedNumber !== undefined)
       updateData.assignedNumber = assignedNumber;
 
-    const updatedSubAccount = db.updateSubAccount(subAccountId, updateData);
+    const updatedSubAccount = await db.updateSubAccount(subAccountId, updateData);
     if (!updatedSubAccount) {
       return res.status(500).json({ error: "Failed to update sub-account" });
     }
