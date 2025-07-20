@@ -14,6 +14,7 @@ import { SocketProvider } from "@/contexts/SocketContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 import Index from "./pages/Index";
+import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
