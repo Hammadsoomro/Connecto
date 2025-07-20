@@ -49,15 +49,15 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-            {/* Navigation */}
+                  {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-        <div className="flex items-center space-x-2">
+        <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
           <div className="relative">
             <MessageSquare className="h-8 w-8 text-purple-400" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
           </div>
           <span className="text-2xl font-bold text-white">Connectlify</span>
-        </div>
+        </a>
         <Button
           variant="ghost"
           size="icon"
