@@ -2,10 +2,10 @@ import { RequestHandler } from "express";
 import { db } from "../database";
 import { CreateSubAccountRequest } from "@shared/types";
 
-export const getSubAccounts: RequestHandler = (req, res) => {
+export const getSubAccounts: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const subAccounts = db.getSubAccountsByUserId(userId);
+    const subAccounts = await db.getSubAccountsByUserId(userId);
     res.json(subAccounts);
   } catch (error) {
     console.error("Error fetching sub accounts:", error);
