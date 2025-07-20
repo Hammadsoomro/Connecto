@@ -30,6 +30,7 @@ import {
   updateSubAccount,
   deleteSubAccount,
 } from "./routes/sub-accounts";
+import { db } from "./database";
 
 export function createExpressApp() {
   const app = express();
