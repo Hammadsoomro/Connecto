@@ -85,15 +85,15 @@ function AuthenticatedApp() {
   return (
     <ErrorBoundary>
       <SocketProvider>
-                <BrowserRouter>
+                                <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/conversations" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/buy-numbers" element={<Dashboard />} />
-            <Route path="/pricing" element={<Dashboard />} />
-            <Route path="/sub-accounts" element={<Dashboard />} />
+            <Route path="/buy-numbers" element={<BuyNumbers />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/sub-accounts" element={<SubAccounts />} />
             <Route path="/profile-settings" element={<Dashboard />} />
             <Route path="/account-settings" element={<Dashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
