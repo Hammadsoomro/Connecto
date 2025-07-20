@@ -59,8 +59,9 @@ export default function ChatNavbar({
 }: ChatNavbarProps) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [isBuyNumberOpen, setIsBuyNumberOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isBuyNumberOpen, setIsBuyNumberOpen] = useState(false);
+  const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
+  const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
   const [isSubAccountsOpen, setIsSubAccountsOpen] = useState(false);
 
   const primaryNumber = phoneNumbers.find((num) => num.isPrimary);
