@@ -49,14 +49,7 @@ export default function Dashboard() {
       if (!response.ok) throw new Error("Failed to fetch phone numbers");
       return response.json() as Promise<PhoneNumber[]>;
     },
-    enabled: !!token,
-    onSuccess: (numbers) => {
-      // Set default selected phone number to primary or first available
-      if (!selectedPhoneNumber && numbers.length > 0) {
-        const primary = numbers.find((num) => num.isPrimary) || numbers[0];
-        setSelectedPhoneNumber(primary);
-      }
-    },
+        enabled: !!token,
   });
 
   // Fetch unread count
