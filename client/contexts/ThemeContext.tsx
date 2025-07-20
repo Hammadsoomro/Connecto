@@ -35,11 +35,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   });
 
-  useEffect(() => {
+    useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
-    localStorage.setItem("theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // Handle cases where localStorage is not available
+      console.warn("localStorage not available for theme persistence");
+    }
   }, [theme]);
 
   const toggleTheme = () => {
