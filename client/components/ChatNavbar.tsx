@@ -35,7 +35,8 @@ import {
   Check,
 } from "lucide-react";
 import BuyNumberDialog from "./BuyNumberDialog";
-import SettingsDialog from "./SettingsDialog";
+import ProfileSettingsDialog from "./ProfileSettingsDialog";
+import AccountSettingsDialog from "./AccountSettingsDialog";
 import SubAccountsDialog from "./SubAccountsDialog";
 import NotificationCenter from "./NotificationCenter";
 
