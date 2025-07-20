@@ -77,13 +77,9 @@ export const authenticateToken: RequestHandler = async (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ error: "Invalid token" });
-    }
-
-        const payload = decoded as { userId: string };
-    const user = await db.getUserById(payload.userId);
+    try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const user = await db.getUserById(decoded.userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -91,7 +87,9 @@ export const authenticateToken: RequestHandler = async (req, res, next) => {
 
     req.user = user;
     next();
-  });
+  } catch (error) {
+    return res.status(403).json({ error: "Invalid token" });
+  }
 };
 
 // Type augmentation for Express Request
