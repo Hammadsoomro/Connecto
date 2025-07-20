@@ -51,9 +51,9 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
       // Refresh contacts list
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
 
-      toast({
+            toast({
         title: "Contact added",
-        description: `${name} has been added to your contacts`,
+        description: `${contactName} has been added to your contacts`,
       });
 
       onClose();
