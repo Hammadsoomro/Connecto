@@ -153,10 +153,10 @@ export const receiveSMS: RequestHandler = async (req, res) => {
   }
 };
 
-export const getUnreadCount: RequestHandler = (req, res) => {
+export const getUnreadCount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const unreadCount = db.getUnreadMessagesCount(userId);
+    const unreadCount = await db.getUnreadMessagesCount(userId);
     res.json({ unreadCount });
   } catch (error) {
     console.error("Error getting unread count:", error);
