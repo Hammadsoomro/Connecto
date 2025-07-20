@@ -51,8 +51,10 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
       return;
     }
 
-    try {
+        try {
       await register({ name, email, password });
+      setSuccess(true);
+      setError("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
