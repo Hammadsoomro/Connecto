@@ -131,51 +131,41 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Main Features Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-slide-up">
+        {/* Main Features Grid - Button Style */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-slide-up">
           {mainFeatures.map((feature) => {
             const Icon = feature.icon;
             return (
               <Link key={feature.title} to={feature.href}>
-                <Card className="group hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer h-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/15">
-                  <CardHeader className="pb-3 text-center">
-                    <div className={`w-10 h-10 mx-auto rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200`}>
-                      <Icon className="h-5 w-5 text-white" />
-                    </div>
-                    <CardTitle className="text-sm font-semibold text-white">{feature.title}</CardTitle>
-                    <CardDescription className="text-xs text-gray-300 line-clamp-2">{feature.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0 text-center">
-                    <div className="flex items-center justify-center text-xs text-purple-300 group-hover:translate-x-1 transition-transform duration-200">
-                      <span>Open</span>
-                      <ChevronRight className="h-3 w-3 ml-1" />
-                    </div>
-                  </CardContent>
-                </Card>
+                <Button 
+                  className={`w-full h-auto p-6 bg-gradient-to-r ${feature.color} hover:opacity-90 text-white border-0 flex flex-col items-center space-y-3 transition-all duration-200 hover:scale-105`}
+                >
+                  <Icon className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-semibold text-base">{feature.title}</div>
+                    <div className="text-xs opacity-90 mt-1">{feature.description}</div>
+                  </div>
+                </Button>
               </Link>
             );
           })}
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Button Style */}
         <div className="mb-8 animate-slide-up-delay">
-          <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <h2 className="text-xl font-semibold text-white mb-4 text-center">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
-                  <Card className="group hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-200 cursor-pointer bg-white/5 backdrop-blur-sm border border-white/10 text-white hover:bg-white/10">
-                    <CardContent className="flex items-center p-3">
-                      <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mr-3 group-hover:bg-purple-500/20 transition-colors">
-                        <Icon className="h-4 w-4 text-gray-300 group-hover:text-purple-300" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-sm text-white">{action.title}</h3>
-                      </div>
-                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-purple-300 group-hover:translate-x-1 transition-all duration-200" />
-                    </CardContent>
-                  </Card>
+                  <Button 
+                    className="w-full h-auto p-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center space-x-3 transition-all duration-200 hover:scale-105"
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="font-medium">{action.title}</span>
+                    <ChevronRight className="h-4 w-4 ml-auto" />
+                  </Button>
                 </Link>
               );
             })}
@@ -183,7 +173,7 @@ export default function Home() {
         </div>
 
         {/* Features Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-float">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-float max-w-4xl mx-auto">
           <Card className="bg-white/5 backdrop-blur-sm border border-white/10 text-white">
             <CardContent className="p-6 text-center">
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
