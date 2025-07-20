@@ -86,7 +86,10 @@ export function createExpressApp() {
   return app;
 }
 
-export function createServer() {
+export async function createServer() {
+  // Initialize database connection
+  await db.connect();
+
   const app = createExpressApp();
   const httpServer = createHttpServer(app);
 
