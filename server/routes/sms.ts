@@ -27,8 +27,8 @@ export const sendSMS: RequestHandler = async (req, res) => {
       body,
     );
 
-    // Save message to database
-    const message = db.createMessage({
+        // Save message to database
+    const message = await db.createMessage({
       userId,
       contactId,
       fromNumber,
