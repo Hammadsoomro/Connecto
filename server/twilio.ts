@@ -8,13 +8,23 @@ const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 export class TwilioService {
   private client: any = null;
 
-  private getClient() {
+    private getClient() {
     if (!this.client) {
-      if (!accountSid || !authToken) {
+      // Get fresh environment variables each time
+      const currentAccountSid = process.env.TWILIO_SID;
+      const currentAuthToken = process.env.TWILIO_AUTH_TOKEN;
+
+      console.log("Twilio getClient debug:");
+      console.log("currentAccountSid:", currentAccountSid ? "Set" : "Not set");
+      console.log("currentAuthToken:", currentAuthToken ? "Set" : "Not set");
+      console.log("accountSid variable:", accountSid ? "Set" : "Not set");
+      console.log("authToken variable:", authToken ? "Set" : "Not set");
+
+      if (!currentAccountSid || !currentAuthToken) {
         throw new Error("Twilio credentials not configured. Please set TWILIO_SID and TWILIO_AUTH_TOKEN environment variables.");
       }
 
-      this.client = twilio(accountSid, authToken);
+      this.client = twilio(currentAccountSid, currentAuthToken);
       console.log("Twilio client initialized successfully");
     }
     return this.client;
