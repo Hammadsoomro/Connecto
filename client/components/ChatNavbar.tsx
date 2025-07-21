@@ -52,7 +52,6 @@ export default function ChatNavbar({
   phoneNumbers,
   unreadCount,
   selectedPhoneNumber,
-  onToggleContactList,
   onPhoneNumberSelect,
   onNotificationMessageClick,
 }: ChatNavbarProps) {
