@@ -40,8 +40,8 @@ export default function ContactList({
       contact.phoneNumber.includes(searchTerm),
   );
 
-  return (
-    <div className="h-full flex flex-col bg-background">
+    return (
+    <div className={`h-full flex flex-col ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-purple-900/20'} backdrop-blur-sm`}>
       {/* Header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between mb-3">
