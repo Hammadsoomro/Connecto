@@ -23,8 +23,38 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  const { user, logout } = useAuth();
+  const { user, logout, token } = useAuth();
   const { theme, toggleTheme } = useTheme();
+
+  // Fetch phone numbers
+  const { data: phoneNumbers = [] } = useQuery({
+    queryKey: ["phone-numbers"],
+    queryFn: async () => {
+      const response = await fetch("/api/phone-numbers", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch phone numbers");
+      return response.json() as Promise<PhoneNumber[]>;
+    },
+    enabled: !!token,
+  });
+
+  // Fetch sub-accounts
+  const { data: subAccounts = [] } = useQuery({
+    queryKey: ["sub-accounts"],
+    queryFn: async () => {
+      const response = await fetch("/api/sub-accounts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch sub-accounts");
+      return response.json() as Promise<SubAccount[]>;
+    },
+    enabled: !!token,
+  });
 
     const mainFeatures = [
     {
