@@ -29,6 +29,7 @@ export default function ContactList({
   contacts,
   selectedContact,
   onContactSelect,
+  onContactDelete,
   onClose,
 }: ContactListProps) {
   const { theme } = useTheme();
