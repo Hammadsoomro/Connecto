@@ -84,9 +84,9 @@ export default function ContactList({
       <ScrollArea className="flex-1">
         <div className="p-2">
           {filteredContacts.length === 0 ? (
-            <div className="text-center py-8">
-              <User className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-              <p className="text-muted-foreground">
+                        <div className="text-center py-8">
+              <User className={`h-12 w-12 mx-auto mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`} />
+              <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`}>
                 {searchTerm ? "No contacts found" : "No contacts yet"}
               </p>
               {!searchTerm && (
