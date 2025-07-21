@@ -49,9 +49,10 @@ export function createExpressApp() {
 
   
 
-  // Auth routes
+    // Auth routes
   app.post("/api/auth/register", register);
   app.post("/api/auth/login", login);
+  app.post("/api/auth/sub-account-login", loginSubAccount);
 
   // Webhook routes (no auth required)
   app.post("/api/webhooks/sms", receiveSMS);
