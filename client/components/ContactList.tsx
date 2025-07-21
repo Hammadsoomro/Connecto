@@ -105,12 +105,13 @@ export default function ContactList({
             </div>
           ) : (
             <div className="space-y-1">
-              {filteredContacts.map((contact) => (
+                            {filteredContacts.map((contact) => (
                 <ContactItem
                   key={contact.id}
                   contact={contact}
                   isSelected={selectedContact?.id === contact.id}
                   onSelect={() => onContactSelect(contact)}
+                  onDelete={onContactDelete}
                 />
               ))}
             </div>
