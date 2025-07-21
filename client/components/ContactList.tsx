@@ -220,8 +220,22 @@ function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemPro
             ) : (
               <span className="italic">No messages yet</span>
             )}
-          </div>
+                    </div>
         </div>
+
+        {/* Delete Button - appears on hover */}
+        {onDelete && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(contact.id);
+            }}
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5"
+            title="Delete contact"
+          >
+            <Trash2 className="h-3 w-3" />
+          </button>
+        )}
       </div>
     </div>
   );
