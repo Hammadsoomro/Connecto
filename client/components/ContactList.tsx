@@ -126,6 +126,7 @@ interface ContactItemProps {
   contact: ContactWithUnread;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (contactId: string) => void;
 }
 
 function ContactItem({ contact, isSelected, onSelect }: ContactItemProps) {
