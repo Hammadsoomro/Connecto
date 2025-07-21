@@ -284,8 +284,9 @@ export default function SubAccountsDialog({
                       <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white flex items-center justify-center">
                         <User className="h-4 w-4" />
                       </div>
-                      <div>
+                                            <div>
                         <div className="font-medium">{account.name}</div>
+                        <div className="text-sm text-muted-foreground">{account.email}</div>
                         {account.assignedNumber ? (
                           <Badge variant="outline" className="text-xs">
                             {account.assignedNumber}
