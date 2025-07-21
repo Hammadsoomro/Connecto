@@ -44,7 +44,6 @@ interface ChatNavbarProps {
   phoneNumbers: PhoneNumber[];
   unreadCount: number;
   selectedPhoneNumber?: PhoneNumber | null;
-  onToggleContactList: () => void;
   onPhoneNumberSelect?: (phoneNumber: PhoneNumber) => void;
   onNotificationMessageClick?: (contactId: string) => void;
 }
