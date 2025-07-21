@@ -16,6 +16,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Dashboard() {
   const { user, token } = useAuth();
+  const { theme } = useTheme();
   const { newMessage, clearNewMessage } = useSocket();
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedPhoneNumber, setSelectedPhoneNumber] =
