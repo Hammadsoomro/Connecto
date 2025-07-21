@@ -47,7 +47,7 @@ export default function BuyNumbers() {
             
             <div className="flex items-center space-x-4">
               <Link to="/">
-                <Button variant="ghost" className="text-white hover:bg-white/10">
+                                <Button variant="ghost" className={`${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-white hover:bg-white/10'}`}>
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Home
                 </Button>
