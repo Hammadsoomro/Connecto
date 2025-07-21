@@ -61,8 +61,8 @@ export default function SubAccountsDialog({
     (num) => !subAccounts.some((acc) => acc.assignedNumber === num.phoneNumber),
   );
 
-  const handleAddSubAccount = async () => {
-    if (!newAccountName.trim()) return;
+    const handleAddSubAccount = async () => {
+    if (!newAccountName.trim() || !newAccountEmail.trim() || !newAccountPassword.trim()) return;
 
     setIsCreating(true);
     try {
