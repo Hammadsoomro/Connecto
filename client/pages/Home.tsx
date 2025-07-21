@@ -187,16 +187,18 @@ export default function Home() {
 
         {/* Dashboard Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up-delay">
-          {/* Wallet Balance */}
-          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-                <CreditCard className="h-6 w-6 text-green-400" />
-              </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Wallet Balance</h3>
-              <p className="text-2xl font-bold text-green-400">$25.00</p>
-            </CardContent>
-          </Card>
+                    {/* Wallet Balance */}
+          <Link to="/wallet">
+            <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm hover:scale-105 transition-transform cursor-pointer`}>
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+                  <CreditCard className="h-6 w-6 text-green-400" />
+                </div>
+                <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Wallet Balance</h3>
+                <p className="text-2xl font-bold text-green-400">$25.00</p>
+              </CardContent>
+            </Card>
+          </Link>
 
           {/* SMS Sent */}
           <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
