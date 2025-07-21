@@ -67,17 +67,8 @@ export default function ChatNavbar({
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3 flex items-center justify-between sticky top-0 z-50">
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggleContactList}
-          className="lg:hidden"
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
-
-                <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="relative">
               <MessageSquare className="h-7 w-7 text-purple-600" />
