@@ -93,7 +93,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="demo@example.com"
+                                    placeholder="Enter your email"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
