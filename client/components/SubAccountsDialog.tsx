@@ -35,7 +35,9 @@ export default function SubAccountsDialog({
   const { token } = useAuth();
   const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = useState(false);
-  const [newAccountName, setNewAccountName] = useState("");
+    const [newAccountName, setNewAccountName] = useState("");
+  const [newAccountEmail, setNewAccountEmail] = useState("");
+  const [newAccountPassword, setNewAccountPassword] = useState("");
   const [selectedNumber, setSelectedNumber] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
