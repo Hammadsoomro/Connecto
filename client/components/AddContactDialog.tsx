@@ -25,10 +25,12 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phoneNumber.trim()) return;
+    if (!phoneNumber.trim()) return;
 
     setIsLoading(true);
     try {
+      const contactName = name.trim() || phoneNumber.trim(); // Use phone number as name if name is empty
+
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {
@@ -36,7 +38,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: name.trim(),
+          name: contactName,
           phoneNumber: phoneNumber.trim(),
         }),
       });
@@ -51,7 +53,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
 
       toast({
         title: "Contact added",
-        description: `${name} has been added to your contacts`,
+        description: `${contactName} has been added to your contacts`,
       });
 
       onClose();
@@ -79,13 +81,12 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="contact-name">Name</Label>
+          <Label htmlFor="contact-name">Name (Optional)</Label>
           <Input
             id="contact-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="John Doe"
-            required
+            placeholder="John Doe (will use phone number if empty)"
           />
         </div>
 

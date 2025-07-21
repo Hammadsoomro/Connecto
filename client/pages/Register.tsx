@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
-import { AlertCircle, MessageSquare } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import {
+  AlertCircle,
+  MessageSquare,
+  CheckCircle,
+  Moon,
+  Sun,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface RegisterPageProps {
@@ -24,7 +31,22 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(3);
   const { register } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+
+  // Countdown effect for redirect
+  useEffect(() => {
+    if (success && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (success && countdown === 0) {
+      onSwitchToLogin();
+    }
+  }, [success, countdown, onSwitchToLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +61,8 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
 
     try {
       await register({ name, email, password });
+      setSuccess(true);
+      setError("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -57,13 +81,28 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
 
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-        <div className="flex items-center space-x-2">
+        <a
+          href="/"
+          className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+        >
           <div className="relative">
             <MessageSquare className="h-8 w-8 text-purple-400" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
           </div>
           <span className="text-2xl font-bold text-white">Connectlify</span>
-        </div>
+        </a>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="text-white hover:bg-white/10"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
+        </Button>
       </nav>
 
       {/* Register Form */}
@@ -71,99 +110,129 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
         <Card className="w-full max-w-md bg-white/10 backdrop-blur-sm border border-white/20 text-white">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-white">
-              Join Connectlify
+              {success ? "Welcome to Connectlify!" : "Join Connectlify"}
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Create your account to start sending SMS
+              {success
+                ? "Your account has been created successfully"
+                : "Create your account to start sending SMS"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-white">
-                  Full Name
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="John Doe"
-                  className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-white">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="john@example.com"
-                  className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-white">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Enter your password"
-                  className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-white">
-                  Confirm Password
-                </Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  placeholder="Confirm your password"
-                  className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
-                />
-              </div>
-
-              {error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-red-500/20 border-red-500/50 text-red-200"
+            {success ? (
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-8 w-8 text-green-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    Account Created Successfully!
+                  </h3>
+                  <p className="text-gray-300 mb-4">
+                    Welcome to Connectlify! Your account has been created
+                    successfully.
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Redirecting to login page in {countdown} seconds...
+                  </p>
+                </div>
+                <Button
+                  onClick={onSwitchToLogin}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
                 >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+                  Go to Login Now
+                </Button>
+              </div>
+            ) : (
+              <>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-white">
+                      Full Name
+                    </Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      placeholder="John Doe"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-white">
+                      Email
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="john@example.com"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-white">
+                      Password
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="Enter your password"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword" className="text-white">
+                      Confirm Password
+                    </Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      placeholder="Confirm your password"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
+                    />
+                  </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
-                disabled={isLoading}
-              >
-                {isLoading ? "Creating account..." : "Create Account"}
-              </Button>
-            </form>
+                  {error && (
+                    <Alert
+                      variant="destructive"
+                      className="bg-red-500/20 border-red-500/50 text-red-200"
+                    >
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
 
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={onSwitchToLogin}
-                className="text-purple-300 hover:text-purple-200"
-              >
-                Already have an account? Sign in
-              </Button>
-            </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Creating account..." : "Create Account"}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center">
+                  <Button
+                    variant="link"
+                    onClick={onSwitchToLogin}
+                    className="text-purple-300 hover:text-purple-200"
+                  >
+                    Already have an account? Sign in
+                  </Button>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

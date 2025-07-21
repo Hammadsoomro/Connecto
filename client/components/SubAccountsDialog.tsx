@@ -36,6 +36,8 @@ export default function SubAccountsDialog({
   const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = useState(false);
   const [newAccountName, setNewAccountName] = useState("");
+  const [newAccountEmail, setNewAccountEmail] = useState("");
+  const [newAccountPassword, setNewAccountPassword] = useState("");
   const [selectedNumber, setSelectedNumber] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
@@ -60,7 +62,12 @@ export default function SubAccountsDialog({
   );
 
   const handleAddSubAccount = async () => {
-    if (!newAccountName.trim()) return;
+    if (
+      !newAccountName.trim() ||
+      !newAccountEmail.trim() ||
+      !newAccountPassword.trim()
+    )
+      return;
 
     setIsCreating(true);
     try {
@@ -72,6 +79,8 @@ export default function SubAccountsDialog({
         },
         body: JSON.stringify({
           name: newAccountName.trim(),
+          email: newAccountEmail.trim(),
+          password: newAccountPassword.trim(),
           assignedNumber: selectedNumber || undefined,
         }),
       });
@@ -83,6 +92,8 @@ export default function SubAccountsDialog({
 
       await queryClient.invalidateQueries({ queryKey: ["sub-accounts"] });
       setNewAccountName("");
+      setNewAccountEmail("");
+      setNewAccountPassword("");
       setSelectedNumber("");
       setIsAdding(false);
       toast({
@@ -198,6 +209,18 @@ export default function SubAccountsDialog({
               onChange={(e) => setNewAccountName(e.target.value)}
               placeholder="Sub account name"
             />
+            <Input
+              type="email"
+              value={newAccountEmail}
+              onChange={(e) => setNewAccountEmail(e.target.value)}
+              placeholder="Email address"
+            />
+            <Input
+              type="password"
+              value={newAccountPassword}
+              onChange={(e) => setNewAccountPassword(e.target.value)}
+              placeholder="Password"
+            />
             <Select value={selectedNumber} onValueChange={setSelectedNumber}>
               <SelectTrigger>
                 <SelectValue placeholder="Assign phone number (optional)" />
@@ -268,6 +291,9 @@ export default function SubAccountsDialog({
                       </div>
                       <div>
                         <div className="font-medium">{account.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {account.email}
+                        </div>
                         {account.assignedNumber ? (
                           <Badge variant="outline" className="text-xs">
                             {account.assignedNumber}

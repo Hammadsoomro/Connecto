@@ -9,13 +9,13 @@ export const sendSMS: RequestHandler = async (req, res) => {
     const userId = req.user!.id;
 
     // Get contact
-    const contact = db.getContactById(contactId);
+    const contact = await db.getContactById(contactId);
     if (!contact || contact.userId !== userId) {
       return res.status(404).json({ error: "Contact not found" });
     }
 
     // Verify user owns the from number
-    const phoneNumber = db.getPhoneNumberByNumber(fromNumber);
+    const phoneNumber = await db.getPhoneNumberByNumber(fromNumber);
     if (!phoneNumber || phoneNumber.userId !== userId) {
       return res.status(400).json({ error: "Invalid from number" });
     }
@@ -28,7 +28,7 @@ export const sendSMS: RequestHandler = async (req, res) => {
     );
 
     // Save message to database
-    const message = db.createMessage({
+    const message = await db.createMessage({
       userId,
       contactId,
       fromNumber,
@@ -53,23 +53,23 @@ export const sendSMS: RequestHandler = async (req, res) => {
   }
 };
 
-export const getMessages: RequestHandler = (req, res) => {
+export const getMessages: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { contactId } = req.params;
 
     if (contactId) {
       // Get messages for specific contact
-      const contact = db.getContactById(contactId);
+      const contact = await db.getContactById(contactId);
       if (!contact || contact.userId !== userId) {
         return res.status(404).json({ error: "Contact not found" });
       }
 
-      const messages = db.getMessagesByContactId(contactId);
+      const messages = await db.getMessagesByContactId(contactId);
       res.json(messages);
     } else {
       // Get all messages for user
-      const messages = db.getMessagesByUserId(userId);
+      const messages = await db.getMessagesByUserId(userId);
       res.json(messages);
     }
   } catch (error) {
@@ -78,12 +78,12 @@ export const getMessages: RequestHandler = (req, res) => {
   }
 };
 
-export const markMessageAsRead: RequestHandler = (req, res) => {
+export const markMessageAsRead: RequestHandler = async (req, res) => {
   try {
     const { messageId } = req.params;
     const userId = req.user!.id;
 
-    const message = db.updateMessage(messageId, { isRead: true });
+    const message = await db.updateMessage(messageId, { isRead: true });
     if (!message || message.userId !== userId) {
       return res.status(404).json({ error: "Message not found" });
     }
@@ -105,12 +105,12 @@ export const markMessageAsRead: RequestHandler = (req, res) => {
 };
 
 // Webhook endpoint for receiving SMS from Twilio
-export const receiveSMS: RequestHandler = (req, res) => {
+export const receiveSMS: RequestHandler = async (req, res) => {
   try {
     const { From, To, Body, MessageSid } = req.body;
 
     // Find the phone number and user
-    const phoneNumber = db.getPhoneNumberByNumber(To);
+    const phoneNumber = await db.getPhoneNumberByNumber(To);
     if (!phoneNumber) {
       console.error("Received SMS for unknown number:", To);
       return res.status(404).send("Number not found");
@@ -119,16 +119,16 @@ export const receiveSMS: RequestHandler = (req, res) => {
     const userId = phoneNumber.userId;
 
     // Find or create contact
-    let contact = db.getContactByPhoneNumber(userId, From);
+    let contact = await db.getContactByPhoneNumber(userId, From);
     if (!contact) {
-      contact = db.createContact(userId, {
+      contact = await db.createContact(userId, {
         name: From, // Use phone number as name initially
         phoneNumber: From,
       });
     }
 
     // Save message
-    const message = db.createMessage({
+    const message = await db.createMessage({
       userId,
       contactId: contact.id,
       fromNumber: From,
@@ -153,10 +153,10 @@ export const receiveSMS: RequestHandler = (req, res) => {
   }
 };
 
-export const getUnreadCount: RequestHandler = (req, res) => {
+export const getUnreadCount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const unreadCount = db.getUnreadMessagesCount(userId);
+    const unreadCount = await db.getUnreadMessagesCount(userId);
     res.json({ unreadCount });
   } catch (error) {
     console.error("Error getting unread count:", error);

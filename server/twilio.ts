@@ -1,44 +1,49 @@
+import twilio from "twilio";
+
 // Environment variables for Twilio configuration
-const accountSid = process.env.TWILIO_ACCOUNT_SID || "demo_sid";
-const authToken = process.env.TWILIO_AUTH_TOKEN || "demo_token";
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 
 export class TwilioService {
   private client: any = null;
 
   private getClient() {
     if (!this.client) {
-      // Only initialize Twilio client when actually needed
-      // and not during build/config time
-      if (accountSid === "demo_sid") {
-        // For demo mode, don't initialize real Twilio client
-        return null;
+      // Get fresh environment variables each time to handle dynamic loading
+      const currentAccountSid = process.env.TWILIO_SID;
+      const currentAuthToken = process.env.TWILIO_AUTH_TOKEN;
+
+      if (!currentAccountSid || !currentAuthToken) {
+        throw new Error(
+          "Twilio credentials not configured. Please set TWILIO_SID and TWILIO_AUTH_TOKEN environment variables.",
+        );
       }
 
-      const twilio = require("twilio");
-      this.client = twilio(accountSid, authToken);
+      this.client = twilio(currentAccountSid, currentAuthToken);
+      console.log("Twilio client initialized successfully");
     }
     return this.client;
   }
 
   async sendSMS(from: string, to: string, body: string): Promise<string> {
     try {
-      // In demo mode, simulate SMS sending
-      if (accountSid === "demo_sid") {
-        console.log(`[DEMO] Sending SMS from ${from} to ${to}: ${body}`);
-        return "demo_message_sid";
-      }
-
       const client = this.getClient();
-      if (!client) {
-        throw new Error("Twilio client not initialized");
+
+      const messageOptions: any = {
+        body,
+        to,
+      };
+
+      // Use messaging service if configured, otherwise use from number
+      if (messagingServiceSid) {
+        messageOptions.messagingServiceSid = messagingServiceSid;
+      } else {
+        messageOptions.from = from;
       }
 
-      const message = await client.messages.create({
-        body,
-        from,
-        to,
-      });
-
+      const message = await client.messages.create(messageOptions);
+      console.log(`SMS sent successfully: ${message.sid}`);
       return message.sid;
     } catch (error) {
       console.error("Error sending SMS:", error);
@@ -48,19 +53,7 @@ export class TwilioService {
 
   async getAvailablePhoneNumbers(areaCode?: string, country = "US") {
     try {
-      // In demo mode, return mock numbers
-      if (accountSid === "demo_sid") {
-        return [
-          { phoneNumber: "+1234567890", friendlyName: "+1 (234) 567-890" },
-          { phoneNumber: "+1234567891", friendlyName: "+1 (234) 567-891" },
-          { phoneNumber: "+1234567892", friendlyName: "+1 (234) 567-892" },
-        ];
-      }
-
       const client = this.getClient();
-      if (!client) {
-        throw new Error("Twilio client not initialized");
-      }
 
       const availableNumbers = await client
         .availablePhoneNumbers(country)
@@ -81,16 +74,7 @@ export class TwilioService {
 
   async purchasePhoneNumber(phoneNumber: string): Promise<string> {
     try {
-      // In demo mode, simulate purchase
-      if (accountSid === "demo_sid") {
-        console.log(`[DEMO] Purchasing number: ${phoneNumber}`);
-        return "demo_purchase_sid";
-      }
-
       const client = this.getClient();
-      if (!client) {
-        throw new Error("Twilio client not initialized");
-      }
 
       const purchasedNumber = await client.incomingPhoneNumbers.create({
         phoneNumber,
@@ -98,6 +82,9 @@ export class TwilioService {
         smsMethod: "POST",
       });
 
+      console.log(
+        `Phone number purchased successfully: ${purchasedNumber.sid}`,
+      );
       return purchasedNumber.sid;
     } catch (error) {
       console.error("Error purchasing phone number:", error);
@@ -107,18 +94,7 @@ export class TwilioService {
 
   async configureWebhook(phoneNumber: string, webhookUrl: string) {
     try {
-      // In demo mode, simulate webhook configuration
-      if (accountSid === "demo_sid") {
-        console.log(
-          `[DEMO] Configuring webhook for ${phoneNumber}: ${webhookUrl}`,
-        );
-        return true;
-      }
-
       const client = this.getClient();
-      if (!client) {
-        return false;
-      }
 
       const phoneNumbers = await client.incomingPhoneNumbers.list({
         phoneNumber,
@@ -129,13 +105,55 @@ export class TwilioService {
           smsUrl: webhookUrl,
           smsMethod: "POST",
         });
+        console.log(`Webhook configured for ${phoneNumber}: ${webhookUrl}`);
         return true;
       }
 
+      console.warn(`Phone number ${phoneNumber} not found in account`);
       return false;
     } catch (error) {
       console.error("Error configuring webhook:", error);
       return false;
+    }
+  }
+
+  async getAccountInfo() {
+    try {
+      const client = this.getClient();
+      const account = await client.api.accounts(accountSid).fetch();
+
+      return {
+        accountSid: account.sid,
+        friendlyName: account.friendlyName,
+        status: account.status,
+        type: account.type,
+      };
+    } catch (error) {
+      console.error("Error fetching account info:", error);
+      throw new Error("Failed to fetch account information");
+    }
+  }
+
+  async getMessagingService() {
+    try {
+      if (!messagingServiceSid) {
+        return null;
+      }
+
+      const client = this.getClient();
+      const service = await client.messaging.v1
+        .services(messagingServiceSid)
+        .fetch();
+
+      return {
+        sid: service.sid,
+        friendlyName: service.friendlyName,
+        inboundRequestUrl: service.inboundRequestUrl,
+        fallbackUrl: service.fallbackUrl,
+      };
+    } catch (error) {
+      console.error("Error fetching messaging service:", error);
+      return null;
     }
   }
 }

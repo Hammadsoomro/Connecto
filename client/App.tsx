@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -14,7 +14,12 @@ import { SocketProvider } from "@/contexts/SocketContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 import Index from "./pages/Index";
+import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import BuyNumbers from "./pages/BuyNumbers";
+import Pricing from "./pages/Pricing";
+import SubAccounts from "./pages/SubAccounts";
+import Wallet from "./pages/Wallet";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import LandingPage from "./pages/LandingPage";
@@ -83,8 +88,16 @@ function AuthenticatedApp() {
       <SocketProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/conversations" element={<Dashboard />} />
+            <Route path="/buy-numbers" element={<BuyNumbers />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/sub-accounts" element={<SubAccounts />} />
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/profile-settings" element={<Dashboard />} />
+            <Route path="/account-settings" element={<Dashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -10,7 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
-import { AlertCircle, MessageSquare, ArrowLeft } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { AlertCircle, MessageSquare, ArrowLeft, Moon, Sun } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface LoginPageProps {
@@ -18,11 +19,12 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,13 +51,28 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
 
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-        <div className="flex items-center space-x-2">
+        <a
+          href="/"
+          className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+        >
           <div className="relative">
             <MessageSquare className="h-8 w-8 text-purple-400" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
           </div>
           <span className="text-2xl font-bold text-white">Connectlify</span>
-        </div>
+        </a>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="text-white hover:bg-white/10"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
+        </Button>
       </nav>
 
       {/* Login Form */}
@@ -79,7 +96,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="demo@example.com"
+                  placeholder="Enter your email"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
@@ -93,7 +110,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="password123"
+                  placeholder="Enter your password"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
@@ -125,16 +142,6 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
               >
                 Don't have an account? Sign up
               </Button>
-            </div>
-
-            <div className="mt-6 p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
-              <p className="text-sm text-purple-200 text-center">
-                <strong>Demo Account:</strong>
-                <br />
-                Email: demo@example.com
-                <br />
-                Password: password123
-              </p>
             </div>
           </CardContent>
         </Card>

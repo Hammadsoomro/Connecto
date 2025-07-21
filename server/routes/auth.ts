@@ -11,7 +11,7 @@ export const register: RequestHandler = async (req, res) => {
     const { email, password, name } = req.body as RegisterRequest;
 
     // Check if user already exists
-    const existingUser = db.getUserByEmail(email);
+    const existingUser = await db.getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
@@ -20,7 +20,7 @@ export const register: RequestHandler = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = db.createUser({ email, name }, hashedPassword);
+    const user = await db.createUser({ email, name }, hashedPassword);
 
     // Generate token
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
@@ -40,13 +40,13 @@ export const login: RequestHandler = async (req, res) => {
     const { email, password } = req.body as LoginRequest;
 
     // Find user
-    const user = db.getUserByEmail(email);
+    const user = await db.getUserByEmail(email);
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     // Check password
-    const storedPassword = db.getUserPassword(email);
+    const storedPassword = await db.getUserPassword(email);
     if (!storedPassword) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
@@ -69,7 +69,7 @@ export const login: RequestHandler = async (req, res) => {
   }
 };
 
-export const authenticateToken: RequestHandler = (req, res, next) => {
+export const authenticateToken: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -77,13 +77,9 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ error: "Invalid token" });
-    }
-
-    const payload = decoded as { userId: string };
-    const user = db.getUserById(payload.userId);
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const user = await db.getUserById(decoded.userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -91,7 +87,9 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
 
     req.user = user;
     next();
-  });
+  } catch (error) {
+    return res.status(403).json({ error: "Invalid token" });
+  }
 };
 
 // Type augmentation for Express Request

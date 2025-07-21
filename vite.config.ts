@@ -2,6 +2,10 @@ import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { createExpressApp } from "./server";
+import { config } from "dotenv";
+
+// Load environment variables in development
+config();
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -25,7 +29,11 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve", // Only apply during development (serve mode)
-    configureServer(server) {
+    async configureServer(server) {
+      // Initialize database connection before creating app
+      const { db } = await import("./server/database");
+      await db.connect();
+
       const app = createExpressApp();
 
       // Add Express app as middleware to Vite dev server

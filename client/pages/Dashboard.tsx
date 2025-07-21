@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useSocket } from "@/contexts/SocketContext";
 import {
   Contact,
@@ -15,11 +16,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Dashboard() {
   const { user, token } = useAuth();
+  const { theme } = useTheme();
   const { newMessage, clearNewMessage } = useSocket();
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedPhoneNumber, setSelectedPhoneNumber] =
     useState<PhoneNumber | null>(null);
-  const [isMobileContactListOpen, setIsMobileContactListOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
   // Fetch contacts with unread count
@@ -50,14 +52,16 @@ export default function Dashboard() {
       return response.json() as Promise<PhoneNumber[]>;
     },
     enabled: !!token,
-    onSuccess: (numbers) => {
-      // Set default selected phone number to primary or first available
-      if (!selectedPhoneNumber && numbers.length > 0) {
-        const primary = numbers.find((num) => num.isPrimary) || numbers[0];
-        setSelectedPhoneNumber(primary);
-      }
-    },
   });
+
+  // Set default selected phone number to primary or first available
+  useEffect(() => {
+    if (!selectedPhoneNumber && phoneNumbers.length > 0) {
+      const primary =
+        phoneNumbers.find((num) => num.isPrimary) || phoneNumbers[0];
+      setSelectedPhoneNumber(primary);
+    }
+  }, [phoneNumbers, selectedPhoneNumber]);
 
   // Fetch unread count
   const { data: unreadData } = useQuery({
@@ -112,7 +116,31 @@ export default function Dashboard() {
 
   const handleContactSelect = (contact: Contact) => {
     setSelectedContact(contact);
-    setIsMobileContactListOpen(false);
+  };
+
+  const handleContactDelete = async (contactId: string) => {
+    try {
+      const response = await fetch(`/api/contacts/${contactId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete contact");
+      }
+
+      // If the deleted contact was selected, clear selection
+      if (selectedContact?.id === contactId) {
+        setSelectedContact(null);
+      }
+
+      // Refresh contacts list
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+    }
   };
 
   const handleNotificationMessageClick = (contactId: string) => {
@@ -127,33 +155,26 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div
+      className={`h-screen flex flex-col ${theme === "dark" ? "bg-gradient-to-br from-black via-gray-900 to-black" : "bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"}`}
+    >
       <ChatNavbar
         phoneNumbers={phoneNumbers}
         selectedPhoneNumber={selectedPhoneNumber}
         unreadCount={unreadData?.unreadCount || 0}
-        onToggleContactList={() =>
-          setIsMobileContactListOpen(!isMobileContactListOpen)
-        }
         onPhoneNumberSelect={setSelectedPhoneNumber}
         onNotificationMessageClick={handleNotificationMessageClick}
       />
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Contact List Sidebar */}
-        <div
-          className={cn(
-            "w-80 border-r bg-background",
-            "lg:block",
-            isMobileContactListOpen ? "block" : "hidden",
-            "lg:relative absolute lg:z-auto z-10 h-full lg:h-auto",
-          )}
-        >
+        {/* Contact List Sidebar - Always visible and locked */}
+        <div className="w-80 border-r bg-background">
           <ContactList
             contacts={contacts}
             selectedContact={selectedContact}
             onContactSelect={handleContactSelect}
-            onClose={() => setIsMobileContactListOpen(false)}
+            onContactDelete={handleContactDelete}
+            onClose={() => {}}
           />
         </div>
 

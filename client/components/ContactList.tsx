@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Contact, ContactWithUnread } from "@shared/types";
-import { Plus, Search, User, X, MessageCircle } from "lucide-react";
+import { Plus, Search, User, X, MessageCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AddContactDialog from "./AddContactDialog";
 
@@ -20,6 +21,7 @@ interface ContactListProps {
   contacts: ContactWithUnread[];
   selectedContact: Contact | null;
   onContactSelect: (contact: Contact) => void;
+  onContactDelete?: (contactId: string) => void;
   onClose?: () => void;
 }
 
@@ -27,8 +29,10 @@ export default function ContactList({
   contacts,
   selectedContact,
   onContactSelect,
+  onContactDelete,
   onClose,
 }: ContactListProps) {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
 
@@ -39,15 +43,27 @@ export default function ContactList({
   );
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div
+      className={`h-full flex flex-col ${theme === "dark" ? "bg-gray-900/50" : "bg-purple-900/20"} backdrop-blur-sm`}
+    >
       {/* Header */}
-      <div className="p-4 border-b">
+      <div
+        className={`p-4 border-b ${theme === "dark" ? "border-white/10" : "border-white/20"}`}
+      >
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold">Contacts</h2>
+          <h2
+            className={`text-lg font-semibold ${theme === "dark" ? "text-white" : "text-white"}`}
+          >
+            Contacts
+          </h2>
           <div className="flex items-center gap-2">
             <Dialog open={isAddContactOpen} onOpenChange={setIsAddContactOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" variant="outline">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className={`${theme === "dark" ? "border-white/20 text-white hover:bg-white/10" : "border-white/30 bg-transparent text-white hover:bg-white/10 border-2"}`}
+                >
                   <Plus className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
@@ -68,12 +84,14 @@ export default function ContactList({
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search
+            className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+          />
           <Input
             placeholder="Search contacts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className={`pl-10 ${theme === "dark" ? "bg-white/10 border-white/20 text-white placeholder:text-gray-400" : "bg-white/10 border-white/30 text-white placeholder:text-gray-300"}`}
           />
         </div>
       </div>
@@ -83,8 +101,12 @@ export default function ContactList({
         <div className="p-2">
           {filteredContacts.length === 0 ? (
             <div className="text-center py-8">
-              <User className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-              <p className="text-muted-foreground">
+              <User
+                className={`h-12 w-12 mx-auto mb-2 ${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+              />
+              <p
+                className={`${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+              >
                 {searchTerm ? "No contacts found" : "No contacts yet"}
               </p>
               {!searchTerm && (
@@ -107,6 +129,7 @@ export default function ContactList({
                   contact={contact}
                   isSelected={selectedContact?.id === contact.id}
                   onSelect={() => onContactSelect(contact)}
+                  onDelete={onContactDelete}
                 />
               ))}
             </div>
@@ -121,9 +144,15 @@ interface ContactItemProps {
   contact: ContactWithUnread;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete?: (contactId: string) => void;
 }
 
-function ContactItem({ contact, isSelected, onSelect }: ContactItemProps) {
+function ContactItem({
+  contact,
+  isSelected,
+  onSelect,
+  onDelete,
+}: ContactItemProps) {
   const formatLastMessage = (message: string) => {
     return message.length > 30 ? message.substring(0, 30) + "..." : message;
   };
@@ -150,7 +179,7 @@ function ContactItem({ contact, isSelected, onSelect }: ContactItemProps) {
   return (
     <div
       className={cn(
-        "p-3 rounded-lg cursor-pointer transition-colors border",
+        "group p-3 rounded-lg cursor-pointer transition-colors border relative",
         "hover:bg-accent hover:text-accent-foreground",
         isSelected && "bg-accent text-accent-foreground border-purple-300",
         !isSelected && "border-transparent hover:border-border",
@@ -216,6 +245,20 @@ function ContactItem({ contact, isSelected, onSelect }: ContactItemProps) {
             )}
           </div>
         </div>
+
+        {/* Delete Button - appears on hover */}
+        {onDelete && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(contact.id);
+            }}
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5"
+            title="Delete contact"
+          >
+            <Trash2 className="h-3 w-3" />
+          </button>
+        )}
       </div>
     </div>
   );

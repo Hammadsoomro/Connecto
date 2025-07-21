@@ -1,3 +1,4 @@
+import { MongoClient, Db, ObjectId } from "mongodb";
 import {
   User,
   Contact,
@@ -6,325 +7,475 @@ import {
   PhoneNumber,
   SubAccount,
 } from "@shared/types";
-
-// In-memory database for demonstration
-// In production, replace with a real database like PostgreSQL, MongoDB, etc.
+import bcrypt from "bcryptjs";
 
 class Database {
-  private users: Map<string, User> = new Map();
-  private contacts: Map<string, Contact> = new Map();
-  private messages: Map<string, Message> = new Map();
-  private phoneNumbers: Map<string, PhoneNumber> = new Map();
-  private subAccounts: Map<string, SubAccount> = new Map();
-  private userPasswords: Map<string, string> = new Map();
+  private client: MongoClient | null = null;
+  private db: Db | null = null;
+  private isConnected = false;
 
-  constructor() {
-    this.initializeDemoData();
-  }
+  async connect() {
+    if (this.isConnected) return;
 
-  private async initializeDemoData() {
-    // Create demo user if it doesn't exist
-    if (!this.getUserByEmail("demo@example.com")) {
-      const bcrypt = await import("bcryptjs");
-      const hashedPassword = await bcrypt.hash("password123", 10);
-      const demoUser = this.createUser(
-        {
-          email: "demo@example.com",
-          name: "Demo User",
-        },
-        hashedPassword,
-      );
+    try {
+      const connectionString = process.env.DB_URL;
+      if (!connectionString) {
+        throw new Error("DB_URL environment variable is required");
+      }
 
-      // Create demo phone numbers
-      this.createPhoneNumber(demoUser.id, {
-        phoneNumber: "+1234567890",
-        friendlyName: "Primary Number",
-        isPrimary: true,
-      });
+      this.client = new MongoClient(connectionString);
+      await this.client.connect();
+      this.db = this.client.db("connectify");
+      this.isConnected = true;
 
-      this.createPhoneNumber(demoUser.id, {
-        phoneNumber: "+1234567891",
-        friendlyName: "Secondary Number",
-        isPrimary: false,
-      });
-
-      // Create demo contacts
-      const contact1 = this.createContact(demoUser.id, {
-        name: "John Doe",
-        phoneNumber: "+1987654321",
-      });
-
-      const contact2 = this.createContact(demoUser.id, {
-        name: "Jane Smith",
-        phoneNumber: "+1987654322",
-      });
-
-      // Create demo messages
-      this.createMessage({
-        userId: demoUser.id,
-        contactId: contact1.id,
-        fromNumber: "+1987654321",
-        toNumber: "+1234567890",
-        body: "Hello! This is John. How are you doing?",
-        direction: "inbound",
-        status: "received",
-        isRead: false,
-      });
-
-      this.createMessage({
-        userId: demoUser.id,
-        contactId: contact1.id,
-        fromNumber: "+1234567890",
-        toNumber: "+1987654321",
-        body: "Hi John! I'm doing great, thanks for asking!",
-        direction: "outbound",
-        status: "delivered",
-        isRead: true,
-      });
-
-      this.createMessage({
-        userId: demoUser.id,
-        contactId: contact2.id,
-        fromNumber: "+1987654322",
-        toNumber: "+1234567890",
-        body: "Hey! Jane here. Are we still on for the meeting tomorrow?",
-        direction: "inbound",
-        status: "received",
-        isRead: false,
-      });
-
-      console.log("Demo data initialized: demo@example.com / password123");
+      console.log("Connected to MongoDB successfully");
+    } catch (error) {
+      console.error("Failed to connect to MongoDB:", error);
+      throw error;
     }
   }
 
+  private async getCollection(name: string) {
+    if (!this.db) {
+      await this.connect();
+    }
+    return this.db!.collection(name);
+  }
+
   // User methods
-  createUser(
+  async createUser(
     userData: Omit<User, "id" | "createdAt" | "updatedAt">,
     password: string,
-  ): User {
-    const id = this.generateId();
+  ): Promise<User> {
+    const users = await this.getCollection("users");
+    const passwords = await this.getCollection("user_passwords");
+
     const now = new Date();
-    const user: User = {
+    const userDoc = {
+      ...userData,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = await users.insertOne(userDoc);
+    const id = result.insertedId.toString();
+
+    // Store password separately
+    await passwords.insertOne({
+      email: userData.email,
+      password,
+    });
+
+    return {
       id,
       ...userData,
       createdAt: now,
       updatedAt: now,
     };
-    this.users.set(id, user);
-    this.userPasswords.set(userData.email, password);
-    return user;
   }
 
-  getUserById(id: string): User | undefined {
-    return this.users.get(id);
+  async getUserById(id: string): Promise<User | undefined> {
+    const users = await this.getCollection("users");
+    const user = await users.findOne({ _id: new ObjectId(id) });
+
+    if (user) {
+      return {
+        id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+    }
+    return undefined;
   }
 
-  getUserByEmail(email: string): User | undefined {
-    return Array.from(this.users.values()).find((user) => user.email === email);
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const users = await this.getCollection("users");
+    const user = await users.findOne({ email });
+
+    if (user) {
+      return {
+        id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
+    }
+    return undefined;
   }
 
-  getUserPassword(email: string): string | undefined {
-    return this.userPasswords.get(email);
+  async getUserPassword(email: string): Promise<string | undefined> {
+    const passwords = await this.getCollection("user_passwords");
+    const result = await passwords.findOne({ email });
+    return result?.password;
   }
 
   // Contact methods
-  createContact(
+  async createContact(
     userId: string,
     contactData: Omit<Contact, "id" | "userId" | "createdAt" | "updatedAt">,
-  ): Contact {
-    const id = this.generateId();
+  ): Promise<Contact> {
+    const contacts = await this.getCollection("contacts");
+
     const now = new Date();
-    const contact: Contact = {
+    const contactDoc = {
+      userId,
+      ...contactData,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = await contacts.insertOne(contactDoc);
+    const id = result.insertedId.toString();
+
+    return {
       id,
       userId,
       ...contactData,
       createdAt: now,
       updatedAt: now,
     };
-    this.contacts.set(id, contact);
-    return contact;
   }
 
-  getContactsByUserId(userId: string): Contact[] {
-    return Array.from(this.contacts.values()).filter(
-      (contact) => contact.userId === userId,
-    );
+  async getContactsByUserId(userId: string): Promise<Contact[]> {
+    const contacts = await this.getCollection("contacts");
+    const result = await contacts.find({ userId }).toArray();
+
+    return result.map((doc) => ({
+      id: doc._id.toString(),
+      userId: doc.userId,
+      name: doc.name,
+      phoneNumber: doc.phoneNumber,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }));
   }
 
-  getContactById(id: string): Contact | undefined {
-    return this.contacts.get(id);
+  async getContactById(id: string): Promise<Contact | undefined> {
+    const contacts = await this.getCollection("contacts");
+    const contact = await contacts.findOne({ _id: new ObjectId(id) });
+
+    if (contact) {
+      return {
+        id: contact._id.toString(),
+        userId: contact.userId,
+        name: contact.name,
+        phoneNumber: contact.phoneNumber,
+        createdAt: contact.createdAt,
+        updatedAt: contact.updatedAt,
+      };
+    }
+    return undefined;
   }
 
-  getContactByPhoneNumber(
+  async getContactByPhoneNumber(
     userId: string,
     phoneNumber: string,
-  ): Contact | undefined {
-    return Array.from(this.contacts.values()).find(
-      (contact) =>
-        contact.userId === userId && contact.phoneNumber === phoneNumber,
-    );
+  ): Promise<Contact | undefined> {
+    const contacts = await this.getCollection("contacts");
+    const contact = await contacts.findOne({ userId, phoneNumber });
+
+    if (contact) {
+      return {
+        id: contact._id.toString(),
+        userId: contact.userId,
+        name: contact.name,
+        phoneNumber: contact.phoneNumber,
+        createdAt: contact.createdAt,
+        updatedAt: contact.updatedAt,
+      };
+    }
+    return undefined;
   }
 
-  deleteContact(id: string): boolean {
-    return this.contacts.delete(id);
+  async deleteContact(id: string): Promise<boolean> {
+    const contacts = await this.getCollection("contacts");
+    const result = await contacts.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount > 0;
   }
 
-  getContactsWithUnread(userId: string): ContactWithUnread[] {
-    const contacts = this.getContactsByUserId(userId);
-    return contacts
-      .map((contact) => {
-        const messages = this.getMessagesByContactId(contact.id);
-        const unreadMessages = messages.filter(
-          (m) => m.direction === "inbound" && !m.isRead,
-        );
-        const lastMessage =
-          messages.length > 0 ? messages[messages.length - 1] : undefined;
+  async getContactsWithUnread(userId: string): Promise<ContactWithUnread[]> {
+    const contacts = await this.getContactsByUserId(userId);
+    const result: ContactWithUnread[] = [];
 
-        return {
-          ...contact,
-          unreadCount: unreadMessages.length,
-          lastMessage,
-          lastMessageAt: lastMessage?.createdAt,
-        };
-      })
-      .sort((a, b) => {
-        // Sort by last message time, most recent first
-        if (a.lastMessageAt && b.lastMessageAt) {
-          return b.lastMessageAt.getTime() - a.lastMessageAt.getTime();
-        }
-        if (a.lastMessageAt) return -1;
-        if (b.lastMessageAt) return 1;
-        return 0;
+    for (const contact of contacts) {
+      const messages = await this.getMessagesByContactId(contact.id);
+      const unreadMessages = messages.filter(
+        (m) => m.direction === "inbound" && !m.isRead,
+      );
+      const lastMessage =
+        messages.length > 0 ? messages[messages.length - 1] : undefined;
+
+      result.push({
+        ...contact,
+        unreadCount: unreadMessages.length,
+        lastMessage,
+        lastMessageAt: lastMessage?.createdAt,
       });
+    }
+
+    // Sort by last message time, most recent first
+    return result.sort((a, b) => {
+      if (a.lastMessageAt && b.lastMessageAt) {
+        return b.lastMessageAt.getTime() - a.lastMessageAt.getTime();
+      }
+      if (a.lastMessageAt) return -1;
+      if (b.lastMessageAt) return 1;
+      return 0;
+    });
   }
 
   // Message methods
-  createMessage(
+  async createMessage(
     messageData: Omit<Message, "id" | "createdAt" | "updatedAt">,
-  ): Message {
-    const id = this.generateId();
+  ): Promise<Message> {
+    const messages = await this.getCollection("messages");
+
     const now = new Date();
-    const message: Message = {
+    const messageDoc = {
+      ...messageData,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = await messages.insertOne(messageDoc);
+    const id = result.insertedId.toString();
+
+    return {
       id,
       ...messageData,
       createdAt: now,
       updatedAt: now,
     };
-    this.messages.set(id, message);
-    return message;
   }
 
-  getMessagesByContactId(contactId: string): Message[] {
-    return Array.from(this.messages.values())
-      .filter((message) => message.contactId === contactId)
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  async getMessagesByContactId(contactId: string): Promise<Message[]> {
+    const messages = await this.getCollection("messages");
+    const result = await messages
+      .find({ contactId })
+      .sort({ createdAt: 1 })
+      .toArray();
+
+    return result.map((doc) => ({
+      id: doc._id.toString(),
+      userId: doc.userId,
+      contactId: doc.contactId,
+      fromNumber: doc.fromNumber,
+      toNumber: doc.toNumber,
+      body: doc.body,
+      direction: doc.direction,
+      status: doc.status,
+      isRead: doc.isRead,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }));
   }
 
-  getMessagesByUserId(userId: string): Message[] {
-    return Array.from(this.messages.values()).filter(
-      (message) => message.userId === userId,
+  async getMessagesByUserId(userId: string): Promise<Message[]> {
+    const messages = await this.getCollection("messages");
+    const result = await messages.find({ userId }).toArray();
+
+    return result.map((doc) => ({
+      id: doc._id.toString(),
+      userId: doc.userId,
+      contactId: doc.contactId,
+      fromNumber: doc.fromNumber,
+      toNumber: doc.toNumber,
+      body: doc.body,
+      direction: doc.direction,
+      status: doc.status,
+      isRead: doc.isRead,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }));
+  }
+
+  async updateMessage(
+    id: string,
+    updates: Partial<Message>,
+  ): Promise<Message | undefined> {
+    const messages = await this.getCollection("messages");
+    const result = await messages.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { ...updates, updatedAt: new Date() } },
+      { returnDocument: "after" },
     );
-  }
 
-  updateMessage(id: string, updates: Partial<Message>): Message | undefined {
-    const message = this.messages.get(id);
-    if (message) {
-      const updatedMessage = { ...message, ...updates, updatedAt: new Date() };
-      this.messages.set(id, updatedMessage);
-      return updatedMessage;
+    if (result) {
+      return {
+        id: result._id.toString(),
+        userId: result.userId,
+        contactId: result.contactId,
+        fromNumber: result.fromNumber,
+        toNumber: result.toNumber,
+        body: result.body,
+        direction: result.direction,
+        status: result.status,
+        isRead: result.isRead,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      };
     }
     return undefined;
   }
 
-  getUnreadMessagesCount(userId: string): number {
-    return Array.from(this.messages.values()).filter(
-      (message) =>
-        message.userId === userId &&
-        !message.isRead &&
-        message.direction === "inbound",
-    ).length;
+  async getUnreadMessagesCount(userId: string): Promise<number> {
+    const messages = await this.getCollection("messages");
+    return await messages.countDocuments({
+      userId,
+      isRead: false,
+      direction: "inbound",
+    });
   }
 
   // Phone number methods
-  createPhoneNumber(
+  async createPhoneNumber(
     userId: string,
     numberData: Omit<PhoneNumber, "id" | "userId" | "createdAt" | "updatedAt">,
-  ): PhoneNumber {
-    const id = this.generateId();
+  ): Promise<PhoneNumber> {
+    const phoneNumbers = await this.getCollection("phone_numbers");
+
     const now = new Date();
-    const phoneNumber: PhoneNumber = {
+    const numberDoc = {
+      userId,
+      ...numberData,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = await phoneNumbers.insertOne(numberDoc);
+    const id = result.insertedId.toString();
+
+    return {
       id,
       userId,
       ...numberData,
       createdAt: now,
       updatedAt: now,
     };
-    this.phoneNumbers.set(id, phoneNumber);
-    return phoneNumber;
   }
 
-  getPhoneNumbersByUserId(userId: string): PhoneNumber[] {
-    return Array.from(this.phoneNumbers.values()).filter(
-      (number) => number.userId === userId,
-    );
+  async getPhoneNumbersByUserId(userId: string): Promise<PhoneNumber[]> {
+    const phoneNumbers = await this.getCollection("phone_numbers");
+    const result = await phoneNumbers.find({ userId }).toArray();
+
+    return result.map((doc) => ({
+      id: doc._id.toString(),
+      userId: doc.userId,
+      phoneNumber: doc.phoneNumber,
+      friendlyName: doc.friendlyName,
+      isPrimary: doc.isPrimary,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }));
   }
 
-  getPhoneNumberByNumber(phoneNumber: string): PhoneNumber | undefined {
-    return Array.from(this.phoneNumbers.values()).find(
-      (number) => number.phoneNumber === phoneNumber,
-    );
+  async getPhoneNumberByNumber(
+    phoneNumber: string,
+  ): Promise<PhoneNumber | undefined> {
+    const phoneNumbers = await this.getCollection("phone_numbers");
+    const number = await phoneNumbers.findOne({ phoneNumber });
+
+    if (number) {
+      return {
+        id: number._id.toString(),
+        userId: number.userId,
+        phoneNumber: number.phoneNumber,
+        friendlyName: number.friendlyName,
+        isPrimary: number.isPrimary,
+        createdAt: number.createdAt,
+        updatedAt: number.updatedAt,
+      };
+    }
+    return undefined;
   }
 
   // Sub-account methods
-  createSubAccount(
+  async createSubAccount(
     userId: string,
     subAccountData: Omit<
       SubAccount,
       "id" | "userId" | "createdAt" | "updatedAt"
     >,
-  ): SubAccount {
-    const id = this.generateId();
+  ): Promise<SubAccount> {
+    const subAccounts = await this.getCollection("sub_accounts");
+
     const now = new Date();
-    const subAccount: SubAccount = {
+    const subAccountDoc = {
+      userId,
+      ...subAccountData,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const result = await subAccounts.insertOne(subAccountDoc);
+    const id = result.insertedId.toString();
+
+    return {
       id,
       userId,
       ...subAccountData,
       createdAt: now,
       updatedAt: now,
     };
-    this.subAccounts.set(id, subAccount);
-    return subAccount;
   }
 
-  getSubAccountsByUserId(userId: string): SubAccount[] {
-    return Array.from(this.subAccounts.values()).filter(
-      (account) => account.userId === userId,
-    );
+  async getSubAccountsByUserId(userId: string): Promise<SubAccount[]> {
+    const subAccounts = await this.getCollection("sub_accounts");
+    const result = await subAccounts.find({ userId }).toArray();
+
+    return result.map((doc) => ({
+      id: doc._id.toString(),
+      userId: doc.userId,
+      name: doc.name,
+      email: doc.email,
+      friendlyName: doc.friendlyName,
+      status: doc.status,
+      assignedNumber: doc.assignedNumber,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }));
   }
 
-  updateSubAccount(
+  async updateSubAccount(
     id: string,
     updates: Partial<SubAccount>,
-  ): SubAccount | undefined {
-    const subAccount = this.subAccounts.get(id);
-    if (subAccount) {
-      const updatedSubAccount = {
-        ...subAccount,
-        ...updates,
-        updatedAt: new Date(),
+  ): Promise<SubAccount | undefined> {
+    const subAccounts = await this.getCollection("sub_accounts");
+    const result = await subAccounts.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { ...updates, updatedAt: new Date() } },
+      { returnDocument: "after" },
+    );
+
+    if (result) {
+      return {
+        id: result._id.toString(),
+        userId: result.userId,
+        name: result.name,
+        friendlyName: result.friendlyName,
+        status: result.status,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       };
-      this.subAccounts.set(id, updatedSubAccount);
-      return updatedSubAccount;
     }
     return undefined;
   }
 
-  deleteSubAccount(id: string): boolean {
-    return this.subAccounts.delete(id);
+  async deleteSubAccount(id: string): Promise<boolean> {
+    const subAccounts = await this.getCollection("sub_accounts");
+    const result = await subAccounts.deleteOne({ _id: new ObjectId(id) });
+    return result.deletedCount > 0;
   }
 
-  private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+  async disconnect() {
+    if (this.client) {
+      await this.client.close();
+      this.isConnected = false;
+      console.log("Disconnected from MongoDB");
+    }
   }
 }
 

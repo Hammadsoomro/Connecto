@@ -19,22 +19,30 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
-    // Check localStorage first
-    const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") {
-      return saved;
+    try {
+      // Check localStorage first
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") {
+        return saved;
+      }
+      // Default to light theme
+      return "light";
+    } catch {
+      // Fallback for SSR or localStorage issues
+      return "light";
     }
-    // Fallback to system preference
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
-    localStorage.setItem("theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // Handle cases where localStorage is not available
+      console.warn("localStorage not available for theme persistence");
+    }
   }, [theme]);
 
   const toggleTheme = () => {

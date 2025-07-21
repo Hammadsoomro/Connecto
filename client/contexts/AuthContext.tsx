@@ -123,12 +123,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error("Invalid response format");
       }
 
-      setUser(data.user);
-      setToken(data.token);
-
-      // Store in localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // Don't automatically log in after registration
+      // Just return success - the UI will handle the redirect
+      return data;
     } catch (error) {
       console.error("Registration error:", error);
       throw error;

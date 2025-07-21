@@ -10,6 +10,10 @@ export interface SubAccount {
   id: string;
   userId: string;
   name: string;
+  email: string;
+  password?: string;
+  friendlyName: string;
+  status: string;
   assignedNumber?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -85,6 +89,8 @@ export interface CreateContactRequest {
 
 export interface CreateSubAccountRequest {
   name: string;
+  email: string;
+  password: string;
   assignedNumber?: string;
 }
 

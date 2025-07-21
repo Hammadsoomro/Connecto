@@ -3,10 +3,10 @@ import { db } from "../database";
 import { twilioService } from "../twilio";
 import { BuyNumberRequest } from "@shared/types";
 
-export const getPhoneNumbers: RequestHandler = (req, res) => {
+export const getPhoneNumbers: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const phoneNumbers = db.getPhoneNumbersByUserId(userId);
+    const phoneNumbers = await db.getPhoneNumbersByUserId(userId);
     res.json(phoneNumbers);
   } catch (error) {
     console.error("Error fetching phone numbers:", error);
@@ -58,12 +58,12 @@ export const purchaseNumber: RequestHandler = async (req, res) => {
   }
 };
 
-export const setPrimaryNumber: RequestHandler = (req, res) => {
+export const setPrimaryNumber: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { numberId } = req.params;
 
-    const userNumbers = db.getPhoneNumbersByUserId(userId);
+    const userNumbers = await db.getPhoneNumbersByUserId(userId);
     const targetNumber = userNumbers.find((num) => num.id === numberId);
 
     if (!targetNumber) {
