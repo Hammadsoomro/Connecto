@@ -71,7 +71,7 @@ export default function BuyNumbers() {
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
               
-              <Button variant="outline" onClick={logout} className="flex items-center space-x-2 border-white/20 text-white hover:bg-white/10">
+                            <Button variant="outline" onClick={logout} className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}>
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </Button>
