@@ -19,7 +19,7 @@ export default function Dashboard() {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedPhoneNumber, setSelectedPhoneNumber] =
     useState<PhoneNumber | null>(null);
-  const [isMobileContactListOpen, setIsMobileContactListOpen] = useState(false);
+  
   const queryClient = useQueryClient();
 
   // Fetch contacts with unread count
@@ -111,9 +111,8 @@ export default function Dashboard() {
     }
   };
 
-  const handleContactSelect = (contact: Contact) => {
+    const handleContactSelect = (contact: Contact) => {
     setSelectedContact(contact);
-    setIsMobileContactListOpen(false);
   };
 
   const handleNotificationMessageClick = (contactId: string) => {
@@ -133,30 +132,19 @@ export default function Dashboard() {
         phoneNumbers={phoneNumbers}
         selectedPhoneNumber={selectedPhoneNumber}
         unreadCount={unreadData?.unreadCount || 0}
-        onToggleContactList={() =>
-          setIsMobileContactListOpen(!isMobileContactListOpen)
-        }
+                onToggleContactList={() => {}}
         onPhoneNumberSelect={setSelectedPhoneNumber}
         onNotificationMessageClick={handleNotificationMessageClick}
       />
 
             <div className="flex-1 flex overflow-hidden">
-        {/* Contact List Sidebar - Always visible on desktop, overlay on mobile */}
-        <div
-          className={cn(
-            "w-80 border-r bg-background",
-            "block", // Always show on desktop
-            "lg:relative absolute lg:z-auto z-10 h-full lg:h-auto",
-            // On mobile, show/hide based on state
-            "lg:translate-x-0 transition-transform duration-300",
-            isMobileContactListOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-          )}
-        >
+                {/* Contact List Sidebar - Always visible and locked */}
+        <div className="w-80 border-r bg-background">
           <ContactList
             contacts={contacts}
             selectedContact={selectedContact}
             onContactSelect={handleContactSelect}
-            onClose={() => setIsMobileContactListOpen(false)}
+                        onClose={() => {}}
           />
         </div>
 
