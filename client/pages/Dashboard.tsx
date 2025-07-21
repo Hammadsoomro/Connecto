@@ -166,11 +166,12 @@ export default function Dashboard() {
             <div className="flex-1 flex overflow-hidden">
                 {/* Contact List Sidebar - Always visible and locked */}
         <div className="w-80 border-r bg-background">
-          <ContactList
+                    <ContactList
             contacts={contacts}
             selectedContact={selectedContact}
             onContactSelect={handleContactSelect}
-                        onClose={() => {}}
+            onContactDelete={handleContactDelete}
+            onClose={() => {}}
           />
         </div>
 
