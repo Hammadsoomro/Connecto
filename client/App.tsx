@@ -19,6 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import BuyNumbers from "./pages/BuyNumbers";
 import Pricing from "./pages/Pricing";
 import SubAccounts from "./pages/SubAccounts";
+import Wallet from "./pages/Wallet";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import LandingPage from "./pages/LandingPage";
