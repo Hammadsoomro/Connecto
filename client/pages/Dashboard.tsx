@@ -113,8 +113,33 @@ export default function Dashboard() {
     }
   };
 
-    const handleContactSelect = (contact: Contact) => {
+      const handleContactSelect = (contact: Contact) => {
     setSelectedContact(contact);
+  };
+
+  const handleContactDelete = async (contactId: string) => {
+    try {
+      const response = await fetch(`/api/contacts/${contactId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete contact");
+      }
+
+      // If the deleted contact was selected, clear selection
+      if (selectedContact?.id === contactId) {
+        setSelectedContact(null);
+      }
+
+      // Refresh contacts list
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+    }
   };
 
   const handleNotificationMessageClick = (contactId: string) => {
