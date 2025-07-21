@@ -142,13 +142,12 @@ export default function Home() {
             return (
               <Link key={feature.title} to={feature.href}>
                 <Button 
-                  className={`w-full h-auto p-6 bg-gradient-to-r ${feature.color} hover:opacity-90 text-white border-0 flex flex-col items-center space-y-3 transition-all duration-200 hover:scale-105`}
+                                    size="lg"
+                  className={`w-full bg-gradient-to-r ${feature.color} hover:opacity-90 text-white border-0 text-lg px-8 py-6 rounded-xl group flex items-center justify-center space-x-3 transition-all duration-200 hover:scale-105`}
                 >
-                  <Icon className="h-8 w-8" />
-                  <div className="text-center">
-                    <div className="font-semibold text-base">{feature.title}</div>
-                    <div className="text-xs opacity-90 mt-1">{feature.description}</div>
-                  </div>
+                                    <Icon className="h-5 w-5" />
+                  <span className="font-semibold">{feature.title}</span>
+                  <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             );
