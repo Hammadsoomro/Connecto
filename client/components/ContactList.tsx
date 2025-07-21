@@ -42,10 +42,10 @@ export default function ContactList({
 
     return (
     <div className={`h-full flex flex-col ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-purple-900/20'} backdrop-blur-sm`}>
-      {/* Header */}
-      <div className="p-4 border-b">
+            {/* Header */}
+      <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-white/20'}`}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold">Contacts</h2>
+          <h2 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Contacts</h2>
           <div className="flex items-center gap-2">
             <Dialog open={isAddContactOpen} onOpenChange={setIsAddContactOpen}>
               <DialogTrigger asChild>
