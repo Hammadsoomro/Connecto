@@ -72,8 +72,10 @@ export default function SubAccountsDialog({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
+                body: JSON.stringify({
           name: newAccountName.trim(),
+          email: newAccountEmail.trim(),
+          password: newAccountPassword.trim(),
           assignedNumber: selectedNumber || undefined,
         }),
       });
