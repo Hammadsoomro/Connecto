@@ -161,7 +161,7 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                 <CreditCard className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Wallet Balance</h3>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Wallet Balance</h3>
               <p className="text-2xl font-bold text-green-400">$25.00</p>
             </CardContent>
           </Card>
@@ -172,7 +172,7 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <MessageSquare className="h-6 w-6 text-blue-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>SMS Sent</h3>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>SMS Sent</h3>
               <p className="text-2xl font-bold text-blue-400">1,247</p>
             </CardContent>
           </Card>
@@ -183,7 +183,7 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
                 <Phone className="h-6 w-6 text-purple-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Phone Numbers</h3>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Phone Numbers</h3>
               <p className="text-2xl font-bold text-purple-400">3</p>
             </CardContent>
           </Card>
@@ -194,7 +194,7 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-4">
                 <Users className="h-6 w-6 text-orange-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Sub Accounts</h3>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Sub Accounts</h3>
               <p className="text-2xl font-bold text-orange-400">1</p>
             </CardContent>
           </Card>
@@ -228,8 +228,8 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-6 w-6 text-blue-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Fast & Reliable</h3>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Fast & Reliable</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'}`}>
                 Send SMS messages instantly with 99.9% delivery rate
               </p>
             </CardContent>
@@ -240,8 +240,8 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Secure</h3>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Secure</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'}`}>
                 End-to-end encryption and secure message handling
               </p>
             </CardContent>
@@ -252,8 +252,8 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
                 <Globe className="h-6 w-6 text-purple-400" />
               </div>
-              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Global Reach</h3>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'}`}>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Global Reach</h3>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'}`}>
                 Send messages worldwide with local numbers
               </p>
             </CardContent>
