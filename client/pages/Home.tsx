@@ -69,7 +69,7 @@ export default function Home() {
   ];
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' : 'bg-gradient-to-br from-slate-50 via-purple-100 to-slate-50'}`}>
+        <div className={`min-h-screen ${theme === 'dark' ? 'bg-gradient-to-br from-black via-gray-900 to-black' : 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900'}`}>
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${theme === 'dark' ? 'bg-purple-500/10' : 'bg-purple-500/20'} rounded-full blur-3xl animate-pulse`}></div>
