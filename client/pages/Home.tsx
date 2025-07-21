@@ -239,14 +239,34 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          {/* Sub Accounts */}
+                    {/* Sub Accounts */}
           <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-4">
-                <Users className="h-6 w-6 text-orange-400" />
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center">
+                  <Users className="h-6 w-6 text-orange-400" />
+                </div>
+                <p className="text-2xl font-bold text-orange-400">{subAccounts.length}</p>
               </div>
               <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Sub Accounts</h3>
-              <p className="text-2xl font-bold text-orange-400">1</p>
+              <div className="space-y-1 text-sm">
+                {subAccounts.slice(0, 2).map((account) => (
+                  <div key={account.id} className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'}`}>
+                    <div className="font-medium">{account.name}</div>
+                    <div className="text-xs opacity-75">{account.email}</div>
+                  </div>
+                ))}
+                {subAccounts.length > 2 && (
+                  <div className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} text-xs`}>
+                    +{subAccounts.length - 2} more
+                  </div>
+                )}
+                {subAccounts.length === 0 && (
+                  <div className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} text-xs`}>
+                    No sub-accounts created
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
