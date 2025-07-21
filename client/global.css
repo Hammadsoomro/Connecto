@@ -8,8 +8,8 @@
    * tailwind.config.ts expects the following color variables to be expressed as HSL values.
    * A different format will require also updating the theme in tailwind.config.ts.
   */
-    :root {
-        --background: 0 0% 100%;
+  :root {
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -49,7 +49,7 @@
     --sidebar-ring: 270 91% 65%;
   }
 
-            .dark {
+  .dark {
     --background: 0 0% 0%;
     --foreground: 45 100% 80%;
 
@@ -94,12 +94,12 @@
     @apply border-border;
   }
 
-    body {
+  body {
     @apply text-foreground bg-background;
     min-height: 100vh;
   }
 
-    /* Light theme gradient pages - purple background */
+  /* Light theme gradient pages - purple background */
   .light .gradient-bg {
     background: linear-gradient(
       135deg,

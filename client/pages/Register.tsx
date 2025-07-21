@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { AlertCircle, MessageSquare, CheckCircle, Moon, Sun } from "lucide-react";
+import {
+  AlertCircle,
+  MessageSquare,
+  CheckCircle,
+  Moon,
+  Sun,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface RegisterPageProps {
@@ -26,7 +32,7 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-    const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(3);
   const { register } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -73,9 +79,12 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-                  {/* Navigation */}
+      {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-        <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+        <a
+          href="/"
+          className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+        >
           <div className="relative">
             <MessageSquare className="h-8 w-8 text-purple-400" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
@@ -104,7 +113,9 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
               {success ? "Welcome to Connectlify!" : "Join Connectlify"}
             </CardTitle>
             <CardDescription className="text-gray-300">
-              {success ? "Your account has been created successfully" : "Create your account to start sending SMS"}
+              {success
+                ? "Your account has been created successfully"
+                : "Create your account to start sending SMS"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,9 +125,12 @@ export default function RegisterPage({ onSwitchToLogin }: RegisterPageProps) {
                   <CheckCircle className="h-8 w-8 text-green-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Account Created Successfully!</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    Account Created Successfully!
+                  </h3>
                   <p className="text-gray-300 mb-4">
-                    Welcome to Connectlify! Your account has been created successfully.
+                    Welcome to Connectlify! Your account has been created
+                    successfully.
                   </p>
                   <p className="text-sm text-gray-400">
                     Redirecting to login page in {countdown} seconds...

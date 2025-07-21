@@ -35,7 +35,7 @@ export default function SubAccountsDialog({
   const { token } = useAuth();
   const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = useState(false);
-    const [newAccountName, setNewAccountName] = useState("");
+  const [newAccountName, setNewAccountName] = useState("");
   const [newAccountEmail, setNewAccountEmail] = useState("");
   const [newAccountPassword, setNewAccountPassword] = useState("");
   const [selectedNumber, setSelectedNumber] = useState("");
@@ -61,8 +61,13 @@ export default function SubAccountsDialog({
     (num) => !subAccounts.some((acc) => acc.assignedNumber === num.phoneNumber),
   );
 
-    const handleAddSubAccount = async () => {
-    if (!newAccountName.trim() || !newAccountEmail.trim() || !newAccountPassword.trim()) return;
+  const handleAddSubAccount = async () => {
+    if (
+      !newAccountName.trim() ||
+      !newAccountEmail.trim() ||
+      !newAccountPassword.trim()
+    )
+      return;
 
     setIsCreating(true);
     try {
@@ -72,7 +77,7 @@ export default function SubAccountsDialog({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-                body: JSON.stringify({
+        body: JSON.stringify({
           name: newAccountName.trim(),
           email: newAccountEmail.trim(),
           password: newAccountPassword.trim(),
@@ -85,7 +90,7 @@ export default function SubAccountsDialog({
         throw new Error(error.error || "Failed to create sub-account");
       }
 
-            await queryClient.invalidateQueries({ queryKey: ["sub-accounts"] });
+      await queryClient.invalidateQueries({ queryKey: ["sub-accounts"] });
       setNewAccountName("");
       setNewAccountEmail("");
       setNewAccountPassword("");
@@ -196,7 +201,7 @@ export default function SubAccountsDialog({
 
       <div className="space-y-4">
         {/* Add Sub Account */}
-                {isAdding ? (
+        {isAdding ? (
           <div className="p-4 border rounded-lg space-y-3">
             <Label>Add New Sub Account</Label>
             <Input
@@ -284,9 +289,11 @@ export default function SubAccountsDialog({
                       <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white flex items-center justify-center">
                         <User className="h-4 w-4" />
                       </div>
-                                            <div>
+                      <div>
                         <div className="font-medium">{account.name}</div>
-                        <div className="text-sm text-muted-foreground">{account.email}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {account.email}
+                        </div>
                         {account.assignedNumber ? (
                           <Badge variant="outline" className="text-xs">
                             {account.assignedNumber}

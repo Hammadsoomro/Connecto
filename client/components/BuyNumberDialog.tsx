@@ -34,8 +34,18 @@ interface AvailableNumber {
 }
 
 const COUNTRIES = [
-  { code: "US", name: "United States", priceRange: "$2.50 - $3.50", smsPrice: "$0.01" },
-  { code: "CA", name: "Canada", priceRange: "$3.00 - $4.50", smsPrice: "$0.01" },
+  {
+    code: "US",
+    name: "United States",
+    priceRange: "$2.50 - $3.50",
+    smsPrice: "$0.01",
+  },
+  {
+    code: "CA",
+    name: "Canada",
+    priceRange: "$3.00 - $4.50",
+    smsPrice: "$0.01",
+  },
 ];
 
 export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
@@ -46,21 +56,25 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
   const queryClient = useQueryClient();
 
   // Generate mock available numbers based on country
-  const generateAvailableNumbers = (country: string, areaCode?: string): AvailableNumber[] => {
+  const generateAvailableNumbers = (
+    country: string,
+    areaCode?: string,
+  ): AvailableNumber[] => {
     if (!country) return [];
-    
+
     const numbers: AvailableNumber[] = [];
     const baseAreaCode = areaCode || (country === "US" ? "415" : "416");
-    
+
     for (let i = 0; i < 10; i++) {
       const randomNumber = Math.floor(1000000 + Math.random() * 9000000);
-      const phoneNumber = country === "US" 
-        ? `+1${baseAreaCode}${randomNumber.toString().substring(0, 7)}`
-        : `+1${baseAreaCode}${randomNumber.toString().substring(0, 7)}`;
-      
+      const phoneNumber =
+        country === "US"
+          ? `+1${baseAreaCode}${randomNumber.toString().substring(0, 7)}`
+          : `+1${baseAreaCode}${randomNumber.toString().substring(0, 7)}`;
+
       const basePrice = country === "US" ? 2.5 : 3.0;
       const price = basePrice + Math.random() * (country === "US" ? 1.0 : 1.5);
-      
+
       numbers.push({
         phoneNumber,
         friendlyName: `${country === "US" ? "US" : "CA"} Number - ${phoneNumber}`,
@@ -68,7 +82,7 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
         price: Math.round(price * 100) / 100,
       });
     }
-    
+
     return numbers;
   };
 
@@ -89,7 +103,11 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
     }
   };
 
-  const handlePurchase = async (phoneNumber: string, friendlyName: string, price: number) => {
+  const handlePurchase = async (
+    phoneNumber: string,
+    friendlyName: string,
+    price: number,
+  ) => {
     setPurchasingNumber(phoneNumber);
     try {
       const response = await fetch("/api/phone-numbers/purchase", {
@@ -133,7 +151,7 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
     }
   };
 
-  const selectedCountryInfo = COUNTRIES.find(c => c.code === selectedCountry);
+  const selectedCountryInfo = COUNTRIES.find((c) => c.code === selectedCountry);
 
   return (
     <DialogContent className="max-w-2xl">
@@ -143,7 +161,8 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
           Buy Phone Number
         </DialogTitle>
         <DialogDescription>
-          Purchase a new phone number to send and receive SMS messages. SMS pricing: $0.01 per message.
+          Purchase a new phone number to send and receive SMS messages. SMS
+          pricing: $0.01 per message.
         </DialogDescription>
       </DialogHeader>
 
@@ -170,7 +189,8 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
           </Select>
           {selectedCountryInfo && (
             <div className="text-sm text-muted-foreground">
-              Price range: {selectedCountryInfo.priceRange} per month • SMS: {selectedCountryInfo.smsPrice} per message
+              Price range: {selectedCountryInfo.priceRange} per month • SMS:{" "}
+              {selectedCountryInfo.smsPrice} per message
             </div>
           )}
         </div>
@@ -180,13 +200,18 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
           <div className="flex gap-2">
             <div className="flex-1">
               <Label htmlFor="area-code">
-                Area Code (Optional) {selectedCountry === "US" ? "- e.g., 415, 212, 718" : "- e.g., 416, 647, 905"}
+                Area Code (Optional){" "}
+                {selectedCountry === "US"
+                  ? "- e.g., 415, 212, 718"
+                  : "- e.g., 416, 647, 905"}
               </Label>
               <Input
                 id="area-code"
                 value={areaCode}
                 onChange={(e) => setAreaCode(e.target.value)}
-                placeholder={selectedCountry === "US" ? "e.g., 415" : "e.g., 416"}
+                placeholder={
+                  selectedCountry === "US" ? "e.g., 415" : "e.g., 416"
+                }
                 maxLength={3}
               />
             </div>
@@ -220,7 +245,10 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
                       <div>
                         <div className="font-medium">{number.phoneNumber}</div>
                         <div className="text-sm text-muted-foreground">
-                          {COUNTRIES.find(c => c.code === number.country)?.name}
+                          {
+                            COUNTRIES.find((c) => c.code === number.country)
+                              ?.name
+                          }
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -231,7 +259,7 @@ export default function BuyNumberDialog({ onClose }: BuyNumberDialogProps) {
                             handlePurchase(
                               number.phoneNumber,
                               number.friendlyName,
-                              number.price
+                              number.price,
                             )
                           }
                           disabled={purchasingNumber === number.phoneNumber}

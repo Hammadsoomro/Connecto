@@ -6,7 +6,7 @@ import { BuyNumberRequest } from "@shared/types";
 export const getPhoneNumbers: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-        const phoneNumbers = await db.getPhoneNumbersByUserId(userId);
+    const phoneNumbers = await db.getPhoneNumbersByUserId(userId);
     res.json(phoneNumbers);
   } catch (error) {
     console.error("Error fetching phone numbers:", error);
@@ -63,7 +63,7 @@ export const setPrimaryNumber: RequestHandler = async (req, res) => {
     const userId = req.user!.id;
     const { numberId } = req.params;
 
-        const userNumbers = await db.getPhoneNumbersByUserId(userId);
+    const userNumbers = await db.getPhoneNumbersByUserId(userId);
     const targetNumber = userNumbers.find((num) => num.id === numberId);
 
     if (!targetNumber) {

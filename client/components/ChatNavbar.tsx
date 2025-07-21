@@ -57,7 +57,7 @@ export default function ChatNavbar({
 }: ChatNavbarProps) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-    const [isBuyNumberOpen, setIsBuyNumberOpen] = useState(false);
+  const [isBuyNumberOpen, setIsBuyNumberOpen] = useState(false);
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
   const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
   const [isSubAccountsOpen, setIsSubAccountsOpen] = useState(false);
@@ -67,9 +67,12 @@ export default function ChatNavbar({
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3 flex items-center justify-between sticky top-0 z-50">
-            <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link
+            to="/"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
             <div className="relative">
               <MessageSquare className="h-7 w-7 text-purple-600" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
@@ -162,7 +165,7 @@ export default function ChatNavbar({
         </Button>
 
         {/* Settings */}
-                <Button
+        <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsAccountSettingsOpen(true)}
@@ -194,7 +197,7 @@ export default function ChatNavbar({
             </div>
             <DropdownMenuSeparator />
 
-                        <DropdownMenuItem
+            <DropdownMenuItem
               onClick={() => setIsProfileSettingsOpen(true)}
               className="cursor-pointer"
             >
@@ -239,15 +242,21 @@ export default function ChatNavbar({
         </DropdownMenu>
       </div>
 
-            {/* Profile Settings Dialog */}
-      <Dialog open={isProfileSettingsOpen} onOpenChange={setIsProfileSettingsOpen}>
+      {/* Profile Settings Dialog */}
+      <Dialog
+        open={isProfileSettingsOpen}
+        onOpenChange={setIsProfileSettingsOpen}
+      >
         <ProfileSettingsDialog
           onClose={() => setIsProfileSettingsOpen(false)}
         />
       </Dialog>
 
       {/* Account Settings Dialog */}
-      <Dialog open={isAccountSettingsOpen} onOpenChange={setIsAccountSettingsOpen}>
+      <Dialog
+        open={isAccountSettingsOpen}
+        onOpenChange={setIsAccountSettingsOpen}
+      >
         <AccountSettingsDialog
           phoneNumbers={phoneNumbers}
           onClose={() => setIsAccountSettingsOpen(false)}

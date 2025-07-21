@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   MessageSquare,
   Users,
@@ -12,7 +18,7 @@ import {
   LogOut,
   User,
   ArrowLeft,
-  Plus
+  Plus,
 } from "lucide-react";
 import SubAccountsDialog from "@/components/SubAccountsDialog";
 import { Dialog } from "@/components/ui/dialog";
@@ -39,8 +45,10 @@ export default function SubAccounts() {
     enabled: !!token,
   });
 
-    return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' : 'bg-gradient-to-br from-slate-50 via-purple-100 to-slate-50'}`}>
+  return (
+    <div
+      className={`min-h-screen ${theme === "dark" ? "bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" : "bg-gradient-to-br from-slate-50 via-purple-100 to-slate-50"}`}
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -53,23 +61,31 @@ export default function SubAccounts() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+              <Link
+                to="/"
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              >
                 <div className="relative">
                   <MessageSquare className="h-8 w-8 text-primary" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Connectlify</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Connectlify
+                </span>
               </Link>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <Link to="/">
-                <Button variant="ghost" className="text-white hover:bg-white/10">
+                <Button
+                  variant="ghost"
+                  className="text-white hover:bg-white/10"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Home
                 </Button>
               </Link>
-              
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -82,13 +98,17 @@ export default function SubAccounts() {
                   <Moon className="h-4 w-4" />
                 )}
               </Button>
-              
+
               <div className="flex items-center space-x-2 text-white">
                 <User className="h-4 w-4" />
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
-              
-              <Button variant="outline" onClick={logout} className="flex items-center space-x-2 border-white/20 text-white hover:bg-white/10">
+
+              <Button
+                variant="outline"
+                onClick={logout}
+                className="flex items-center space-x-2 border-white/20 text-white hover:bg-white/10"
+              >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </Button>
@@ -111,7 +131,9 @@ export default function SubAccounts() {
         <div className="max-w-2xl mx-auto">
           <Card className="bg-white/10 backdrop-blur-sm border border-white/20 text-white">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl text-white">Team Management</CardTitle>
+              <CardTitle className="text-2xl text-white">
+                Team Management
+              </CardTitle>
               <CardDescription className="text-gray-300">
                 Create and manage sub-accounts for your team members
               </CardDescription>
@@ -120,24 +142,33 @@ export default function SubAccounts() {
               <div className="w-16 h-16 mx-auto bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
                 <Users className="h-8 w-8 text-white" />
               </div>
-              
+
               <div className="space-y-4">
                 <p className="text-gray-300">
-                  Organize your SMS campaigns by creating sub-accounts for different team members or projects.
+                  Organize your SMS campaigns by creating sub-accounts for
+                  different team members or projects.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="p-4 bg-white/5 rounded-lg">
-                    <h4 className="font-medium text-white mb-2">Team Collaboration</h4>
-                    <p className="text-gray-400">Assign phone numbers to team members</p>
+                    <h4 className="font-medium text-white mb-2">
+                      Team Collaboration
+                    </h4>
+                    <p className="text-gray-400">
+                      Assign phone numbers to team members
+                    </p>
                   </div>
                   <div className="p-4 bg-white/5 rounded-lg">
-                    <h4 className="font-medium text-white mb-2">Organized Workflow</h4>
-                    <p className="text-gray-400">Separate campaigns and projects</p>
+                    <h4 className="font-medium text-white mb-2">
+                      Organized Workflow
+                    </h4>
+                    <p className="text-gray-400">
+                      Separate campaigns and projects
+                    </p>
                   </div>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={() => setIsSubAccountsOpen(true)}
                 className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white border-0 py-3"
               >

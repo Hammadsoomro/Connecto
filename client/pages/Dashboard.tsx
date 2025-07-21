@@ -21,7 +21,7 @@ export default function Dashboard() {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedPhoneNumber, setSelectedPhoneNumber] =
     useState<PhoneNumber | null>(null);
-  
+
   const queryClient = useQueryClient();
 
   // Fetch contacts with unread count
@@ -51,13 +51,14 @@ export default function Dashboard() {
       if (!response.ok) throw new Error("Failed to fetch phone numbers");
       return response.json() as Promise<PhoneNumber[]>;
     },
-                enabled: !!token,
+    enabled: !!token,
   });
 
   // Set default selected phone number to primary or first available
   useEffect(() => {
     if (!selectedPhoneNumber && phoneNumbers.length > 0) {
-      const primary = phoneNumbers.find((num) => num.isPrimary) || phoneNumbers[0];
+      const primary =
+        phoneNumbers.find((num) => num.isPrimary) || phoneNumbers[0];
       setSelectedPhoneNumber(primary);
     }
   }, [phoneNumbers, selectedPhoneNumber]);
@@ -113,7 +114,7 @@ export default function Dashboard() {
     }
   };
 
-      const handleContactSelect = (contact: Contact) => {
+  const handleContactSelect = (contact: Contact) => {
     setSelectedContact(contact);
   };
 
@@ -153,9 +154,11 @@ export default function Dashboard() {
     return null;
   }
 
-    return (
-    <div className={`h-screen flex flex-col ${theme === 'dark' ? 'bg-gradient-to-br from-black via-gray-900 to-black' : 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900'}`}>
-            <ChatNavbar
+  return (
+    <div
+      className={`h-screen flex flex-col ${theme === "dark" ? "bg-gradient-to-br from-black via-gray-900 to-black" : "bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"}`}
+    >
+      <ChatNavbar
         phoneNumbers={phoneNumbers}
         selectedPhoneNumber={selectedPhoneNumber}
         unreadCount={unreadData?.unreadCount || 0}
@@ -163,10 +166,10 @@ export default function Dashboard() {
         onNotificationMessageClick={handleNotificationMessageClick}
       />
 
-            <div className="flex-1 flex overflow-hidden">
-                {/* Contact List Sidebar - Always visible and locked */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Contact List Sidebar - Always visible and locked */}
         <div className="w-80 border-r bg-background">
-                    <ContactList
+          <ContactList
             contacts={contacts}
             selectedContact={selectedContact}
             onContactSelect={handleContactSelect}

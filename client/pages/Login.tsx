@@ -19,10 +19,10 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
-    const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -49,9 +49,12 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-                  {/* Navigation */}
+      {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 lg:p-8">
-        <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+        <a
+          href="/"
+          className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+        >
           <div className="relative">
             <MessageSquare className="h-8 w-8 text-purple-400" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
@@ -93,7 +96,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                                    placeholder="Enter your email"
+                  placeholder="Enter your email"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
@@ -107,7 +110,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                                    placeholder="Enter your password"
+                  placeholder="Enter your password"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
@@ -140,8 +143,6 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                 Don't have an account? Sign up
               </Button>
             </div>
-
-            
           </CardContent>
         </Card>
       </div>

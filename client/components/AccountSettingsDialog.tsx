@@ -10,15 +10,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PhoneNumber } from "@shared/types";
-import { 
-  Phone, 
-  Crown, 
-  Settings, 
-  CreditCard, 
-  Globe, 
+import {
+  Phone,
+  Crown,
+  Settings,
+  CreditCard,
+  Globe,
   Trash2,
   Plus,
-  DollarSign
+  DollarSign,
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -51,10 +51,14 @@ export default function AccountSettingsDialog({
   };
 
   const handleDeleteNumber = async (numberId: string) => {
-    if (!confirm("Are you sure you want to delete this phone number? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this phone number? This action cannot be undone.",
+      )
+    ) {
       return;
     }
-    
+
     setIsLoading(true);
     try {
       // API call to delete number would go here
@@ -156,7 +160,9 @@ export default function AccountSettingsDialog({
                 <CreditCard className="h-4 w-4" />
                 <span className="font-medium">Current Plan</span>
               </div>
-              <p className="text-sm text-muted-foreground mb-2">Pay-as-you-go</p>
+              <p className="text-sm text-muted-foreground mb-2">
+                Pay-as-you-go
+              </p>
               <Button size="sm" variant="outline">
                 View Plans
               </Button>
@@ -174,7 +180,7 @@ export default function AccountSettingsDialog({
           </div>
         </div>
 
-                {/* SMS Configuration */}
+        {/* SMS Configuration */}
         <div className="space-y-3">
           <Label className="text-base font-medium">SMS Configuration</Label>
           <div className="space-y-3">
@@ -189,9 +195,10 @@ export default function AccountSettingsDialog({
                 </div>
               </div>
               <div className="text-sm text-muted-foreground">
-                ✅ Account SID: Configured<br />
-                ✅ Auth Token: Configured<br />
-                ✅ Messaging Service: Ready
+                ✅ Account SID: Configured
+                <br />
+                ✅ Auth Token: Configured
+                <br />✅ Messaging Service: Ready
               </div>
             </div>
           </div>
@@ -204,7 +211,10 @@ export default function AccountSettingsDialog({
             <Button variant="outline" className="w-full justify-start">
               Export Account Data
             </Button>
-            <Button variant="outline" className="w-full justify-start text-red-600 hover:text-red-700">
+            <Button
+              variant="outline"
+              className="w-full justify-start text-red-600 hover:text-red-700"
+            >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete Account
             </Button>

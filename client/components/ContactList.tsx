@@ -42,16 +42,28 @@ export default function ContactList({
       contact.phoneNumber.includes(searchTerm),
   );
 
-    return (
-    <div className={`h-full flex flex-col ${theme === 'dark' ? 'bg-gray-900/50' : 'bg-purple-900/20'} backdrop-blur-sm`}>
-            {/* Header */}
-      <div className={`p-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-white/20'}`}>
+  return (
+    <div
+      className={`h-full flex flex-col ${theme === "dark" ? "bg-gray-900/50" : "bg-purple-900/20"} backdrop-blur-sm`}
+    >
+      {/* Header */}
+      <div
+        className={`p-4 border-b ${theme === "dark" ? "border-white/10" : "border-white/20"}`}
+      >
         <div className="flex items-center justify-between mb-3">
-          <h2 className={`text-lg font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Contacts</h2>
+          <h2
+            className={`text-lg font-semibold ${theme === "dark" ? "text-white" : "text-white"}`}
+          >
+            Contacts
+          </h2>
           <div className="flex items-center gap-2">
             <Dialog open={isAddContactOpen} onOpenChange={setIsAddContactOpen}>
               <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" className={`${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className={`${theme === "dark" ? "border-white/20 text-white hover:bg-white/10" : "border-white/30 bg-transparent text-white hover:bg-white/10 border-2"}`}
+                >
                   <Plus className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
@@ -71,13 +83,15 @@ export default function ContactList({
         </div>
 
         {/* Search */}
-                <div className="relative">
-          <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`} />
+        <div className="relative">
+          <Search
+            className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+          />
           <Input
             placeholder="Search contacts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`pl-10 ${theme === 'dark' ? 'bg-white/10 border-white/20 text-white placeholder:text-gray-400' : 'bg-white/10 border-white/30 text-white placeholder:text-gray-300'}`}
+            className={`pl-10 ${theme === "dark" ? "bg-white/10 border-white/20 text-white placeholder:text-gray-400" : "bg-white/10 border-white/30 text-white placeholder:text-gray-300"}`}
           />
         </div>
       </div>
@@ -86,9 +100,13 @@ export default function ContactList({
       <ScrollArea className="flex-1">
         <div className="p-2">
           {filteredContacts.length === 0 ? (
-                        <div className="text-center py-8">
-              <User className={`h-12 w-12 mx-auto mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`} />
-              <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`}>
+            <div className="text-center py-8">
+              <User
+                className={`h-12 w-12 mx-auto mb-2 ${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+              />
+              <p
+                className={`${theme === "dark" ? "text-gray-400" : "text-gray-300"}`}
+              >
                 {searchTerm ? "No contacts found" : "No contacts yet"}
               </p>
               {!searchTerm && (
@@ -105,7 +123,7 @@ export default function ContactList({
             </div>
           ) : (
             <div className="space-y-1">
-                            {filteredContacts.map((contact) => (
+              {filteredContacts.map((contact) => (
                 <ContactItem
                   key={contact.id}
                   contact={contact}
@@ -129,7 +147,12 @@ interface ContactItemProps {
   onDelete?: (contactId: string) => void;
 }
 
-function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemProps) {
+function ContactItem({
+  contact,
+  isSelected,
+  onSelect,
+  onDelete,
+}: ContactItemProps) {
   const formatLastMessage = (message: string) => {
     return message.length > 30 ? message.substring(0, 30) + "..." : message;
   };
@@ -153,7 +176,7 @@ function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemPro
     }
   };
 
-    return (
+  return (
     <div
       className={cn(
         "group p-3 rounded-lg cursor-pointer transition-colors border relative",
@@ -220,7 +243,7 @@ function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemPro
             ) : (
               <span className="italic">No messages yet</span>
             )}
-                    </div>
+          </div>
         </div>
 
         {/* Delete Button - appears on hover */}

@@ -1,4 +1,4 @@
-import twilio from 'twilio';
+import twilio from "twilio";
 
 // Environment variables for Twilio configuration
 const accountSid = process.env.TWILIO_SID;
@@ -8,14 +8,16 @@ const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 export class TwilioService {
   private client: any = null;
 
-      private getClient() {
+  private getClient() {
     if (!this.client) {
       // Get fresh environment variables each time to handle dynamic loading
       const currentAccountSid = process.env.TWILIO_SID;
       const currentAuthToken = process.env.TWILIO_AUTH_TOKEN;
 
       if (!currentAccountSid || !currentAuthToken) {
-        throw new Error("Twilio credentials not configured. Please set TWILIO_SID and TWILIO_AUTH_TOKEN environment variables.");
+        throw new Error(
+          "Twilio credentials not configured. Please set TWILIO_SID and TWILIO_AUTH_TOKEN environment variables.",
+        );
       }
 
       this.client = twilio(currentAccountSid, currentAuthToken);
@@ -80,7 +82,9 @@ export class TwilioService {
         smsMethod: "POST",
       });
 
-      console.log(`Phone number purchased successfully: ${purchasedNumber.sid}`);
+      console.log(
+        `Phone number purchased successfully: ${purchasedNumber.sid}`,
+      );
       return purchasedNumber.sid;
     } catch (error) {
       console.error("Error purchasing phone number:", error);
@@ -117,7 +121,7 @@ export class TwilioService {
     try {
       const client = this.getClient();
       const account = await client.api.accounts(accountSid).fetch();
-      
+
       return {
         accountSid: account.sid,
         friendlyName: account.friendlyName,
@@ -137,8 +141,10 @@ export class TwilioService {
       }
 
       const client = this.getClient();
-      const service = await client.messaging.v1.services(messagingServiceSid).fetch();
-      
+      const service = await client.messaging.v1
+        .services(messagingServiceSid)
+        .fetch();
+
       return {
         sid: service.sid,
         friendlyName: service.friendlyName,

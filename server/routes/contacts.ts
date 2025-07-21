@@ -5,7 +5,7 @@ import { CreateContactRequest } from "@shared/types";
 export const getContacts: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-        const contacts = await db.getContactsByUserId(userId);
+    const contacts = await db.getContactsByUserId(userId);
     res.json(contacts);
   } catch (error) {
     console.error("Error fetching contacts:", error);
@@ -16,7 +16,7 @@ export const getContacts: RequestHandler = async (req, res) => {
 export const getContactsWithUnread: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-        const contacts = await db.getContactsWithUnread(userId);
+    const contacts = await db.getContactsWithUnread(userId);
     res.json(contacts);
   } catch (error) {
     console.error("Error fetching contacts with unread:", error);
@@ -30,12 +30,15 @@ export const createContact: RequestHandler = async (req, res) => {
     const { name, phoneNumber } = req.body as CreateContactRequest;
 
     // Check if contact already exists
-        const existingContact = await db.getContactByPhoneNumber(userId, phoneNumber);
+    const existingContact = await db.getContactByPhoneNumber(
+      userId,
+      phoneNumber,
+    );
     if (existingContact) {
       return res.status(400).json({ error: "Contact already exists" });
     }
 
-        const contact = await db.createContact(userId, { name, phoneNumber });
+    const contact = await db.createContact(userId, { name, phoneNumber });
 
     // Emit to Socket.IO for real-time updates
     const io = req.app.get("io");
@@ -55,12 +58,12 @@ export const deleteContact: RequestHandler = async (req, res) => {
     const userId = req.user!.id;
     const { contactId } = req.params;
 
-        const contact = await db.getContactById(contactId);
+    const contact = await db.getContactById(contactId);
     if (!contact || contact.userId !== userId) {
       return res.status(404).json({ error: "Contact not found" });
     }
 
-        const deleted = await db.deleteContact(contactId);
+    const deleted = await db.deleteContact(contactId);
     if (!deleted) {
       return res.status(500).json({ error: "Failed to delete contact" });
     }
@@ -78,7 +81,7 @@ export const updateContact: RequestHandler = async (req, res) => {
     const { contactId } = req.params;
     const { name } = req.body;
 
-        const contact = await db.getContactById(contactId);
+    const contact = await db.getContactById(contactId);
     if (!contact || contact.userId !== userId) {
       return res.status(404).json({ error: "Contact not found" });
     }

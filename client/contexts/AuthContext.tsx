@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-    const register = async (userData: RegisterRequest) => {
+  const register = async (userData: RegisterRequest) => {
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",

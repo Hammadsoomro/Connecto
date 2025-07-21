@@ -18,7 +18,8 @@ export const getSubAccounts: RequestHandler = async (req, res) => {
 export const createSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const { name, email, password, assignedNumber } = req.body as CreateSubAccountRequest;
+    const { name, email, password, assignedNumber } =
+      req.body as CreateSubAccountRequest;
 
     // Check if user already has 3 sub-accounts
     const existingSubAccounts = await db.getSubAccountsByUserId(userId);
@@ -49,7 +50,7 @@ export const createSubAccount: RequestHandler = async (req, res) => {
       }
     }
 
-        // Hash password for sub-account
+    // Hash password for sub-account
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const subAccount = await db.createSubAccount(userId, {
@@ -58,7 +59,7 @@ export const createSubAccount: RequestHandler = async (req, res) => {
       password: hashedPassword,
       assignedNumber,
       friendlyName: name,
-      status: "active"
+      status: "active",
     });
 
     // Emit to Socket.IO for real-time updates
@@ -78,7 +79,7 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { subAccountId } = req.params;
-        const { name, email, password, assignedNumber } = req.body;
+    const { name, email, password, assignedNumber } = req.body;
 
     // Check if sub-account exists and belongs to user
     const subAccounts = await db.getSubAccountsByUserId(userId);
@@ -111,7 +112,7 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
       }
     }
 
-        const updateData: Partial<typeof subAccount> = {};
+    const updateData: Partial<typeof subAccount> = {};
     if (name !== undefined) updateData.name = name;
     if (email !== undefined) updateData.email = email;
     if (password !== undefined) {
@@ -120,7 +121,10 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
     if (assignedNumber !== undefined)
       updateData.assignedNumber = assignedNumber;
 
-    const updatedSubAccount = await db.updateSubAccount(subAccountId, updateData);
+    const updatedSubAccount = await db.updateSubAccount(
+      subAccountId,
+      updateData,
+    );
     if (!updatedSubAccount) {
       return res.status(500).json({ error: "Failed to update sub-account" });
     }
@@ -161,7 +165,7 @@ export const deleteSubAccount: RequestHandler = async (req, res) => {
       io.to(`user_${userId}`).emit("sub-account-deleted", subAccountId);
     }
 
-        res.json({ message: "Sub-account deleted successfully" });
+    res.json({ message: "Sub-account deleted successfully" });
   } catch (error) {
     console.error("Error deleting sub account:", error);
     res.status(500).json({ error: "Failed to delete sub account" });
@@ -192,10 +196,10 @@ export const loginSubAccount: RequestHandler = async (req, res) => {
         id: subAccount._id.toString(),
         type: "sub-account",
         parentUserId: subAccount.userId,
-        assignedNumber: subAccount.assignedNumber
+        assignedNumber: subAccount.assignedNumber,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     // Return sub-account info (excluding password)
@@ -214,7 +218,7 @@ export const loginSubAccount: RequestHandler = async (req, res) => {
     res.json({
       user: subAccountResponse,
       token,
-      isSubAccount: true
+      isSubAccount: true,
     });
   } catch (error) {
     console.error("Error logging in sub account:", error);

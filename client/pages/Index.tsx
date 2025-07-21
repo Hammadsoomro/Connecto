@@ -1,5 +1,4 @@
 export default function Index() {
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
       <div className="text-center">
@@ -36,7 +35,6 @@ export default function Index() {
           Watch the chat on the left for updates that might need your attention
           to finish generating
         </p>
-        
       </div>
     </div>
   );

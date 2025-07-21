@@ -43,13 +43,11 @@ export function createExpressApp() {
   app.use(express.urlencoded({ extended: true }));
 
   // Public routes
-      app.get("/api/ping", (_req, res) => {
+  app.get("/api/ping", (_req, res) => {
     res.json({ message: "Hello from Express server v2!" });
   });
 
-  
-
-    // Auth routes
+  // Auth routes
   app.post("/api/auth/register", register);
   app.post("/api/auth/login", login);
   app.post("/api/auth/sub-account-login", loginSubAccount);

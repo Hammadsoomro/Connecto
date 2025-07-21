@@ -10,7 +10,7 @@ export const register: RequestHandler = async (req, res) => {
   try {
     const { email, password, name } = req.body as RegisterRequest;
 
-        // Check if user already exists
+    // Check if user already exists
     const existingUser = await db.getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
@@ -39,7 +39,7 @@ export const login: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body as LoginRequest;
 
-        // Find user
+    // Find user
     const user = await db.getUserByEmail(email);
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -77,7 +77,7 @@ export const authenticateToken: RequestHandler = async (req, res, next) => {
     return res.status(401).json({ error: "Access token required" });
   }
 
-    try {
+  try {
     const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
     const user = await db.getUserById(decoded.userId);
 

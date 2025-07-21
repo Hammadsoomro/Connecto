@@ -23,7 +23,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber.trim()) return;
 
@@ -51,7 +51,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
       // Refresh contacts list
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
 
-            toast({
+      toast({
         title: "Contact added",
         description: `${contactName} has been added to your contacts`,
       });
@@ -80,7 +80,7 @@ export default function AddContactDialog({ onClose }: AddContactDialogProps) {
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="contact-name">Name (Optional)</Label>
           <Input
             id="contact-name"

@@ -51,7 +51,7 @@ export default function ProfileSettingsDialog({
       setMessage("New passwords do not match.");
       return;
     }
-    
+
     setIsLoading(true);
     setMessage("");
 
@@ -188,9 +188,14 @@ export default function ProfileSettingsDialog({
                 </div>
               </div>
             </div>
-            <Button 
-              type="submit" 
-              disabled={isLoading || !currentPassword || !newPassword || !confirmPassword}
+            <Button
+              type="submit"
+              disabled={
+                isLoading ||
+                !currentPassword ||
+                !newPassword ||
+                !confirmPassword
+              }
               className="flex items-center gap-2"
             >
               <Shield className="h-4 w-4" />

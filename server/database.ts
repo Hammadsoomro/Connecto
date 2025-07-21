@@ -27,10 +27,8 @@ class Database {
       await this.client.connect();
       this.db = this.client.db("connectify");
       this.isConnected = true;
-      
+
       console.log("Connected to MongoDB successfully");
-      
-      
     } catch (error) {
       console.error("Failed to connect to MongoDB:", error);
       throw error;
@@ -44,7 +42,6 @@ class Database {
     return this.db!.collection(name);
   }
 
-
   // User methods
   async createUser(
     userData: Omit<User, "id" | "createdAt" | "updatedAt">,
@@ -52,23 +49,23 @@ class Database {
   ): Promise<User> {
     const users = await this.getCollection("users");
     const passwords = await this.getCollection("user_passwords");
-    
+
     const now = new Date();
     const userDoc = {
       ...userData,
       createdAt: now,
       updatedAt: now,
     };
-    
+
     const result = await users.insertOne(userDoc);
     const id = result.insertedId.toString();
-    
+
     // Store password separately
     await passwords.insertOne({
       email: userData.email,
       password,
     });
-    
+
     return {
       id,
       ...userData,
@@ -80,7 +77,7 @@ class Database {
   async getUserById(id: string): Promise<User | undefined> {
     const users = await this.getCollection("users");
     const user = await users.findOne({ _id: new ObjectId(id) });
-    
+
     if (user) {
       return {
         id: user._id.toString(),
@@ -96,7 +93,7 @@ class Database {
   async getUserByEmail(email: string): Promise<User | undefined> {
     const users = await this.getCollection("users");
     const user = await users.findOne({ email });
-    
+
     if (user) {
       return {
         id: user._id.toString(),
@@ -121,7 +118,7 @@ class Database {
     contactData: Omit<Contact, "id" | "userId" | "createdAt" | "updatedAt">,
   ): Promise<Contact> {
     const contacts = await this.getCollection("contacts");
-    
+
     const now = new Date();
     const contactDoc = {
       userId,
@@ -129,10 +126,10 @@ class Database {
       createdAt: now,
       updatedAt: now,
     };
-    
+
     const result = await contacts.insertOne(contactDoc);
     const id = result.insertedId.toString();
-    
+
     return {
       id,
       userId,
@@ -145,8 +142,8 @@ class Database {
   async getContactsByUserId(userId: string): Promise<Contact[]> {
     const contacts = await this.getCollection("contacts");
     const result = await contacts.find({ userId }).toArray();
-    
-    return result.map(doc => ({
+
+    return result.map((doc) => ({
       id: doc._id.toString(),
       userId: doc.userId,
       name: doc.name,
@@ -159,7 +156,7 @@ class Database {
   async getContactById(id: string): Promise<Contact | undefined> {
     const contacts = await this.getCollection("contacts");
     const contact = await contacts.findOne({ _id: new ObjectId(id) });
-    
+
     if (contact) {
       return {
         id: contact._id.toString(),
@@ -179,7 +176,7 @@ class Database {
   ): Promise<Contact | undefined> {
     const contacts = await this.getCollection("contacts");
     const contact = await contacts.findOne({ userId, phoneNumber });
-    
+
     if (contact) {
       return {
         id: contact._id.toString(),
@@ -202,14 +199,15 @@ class Database {
   async getContactsWithUnread(userId: string): Promise<ContactWithUnread[]> {
     const contacts = await this.getContactsByUserId(userId);
     const result: ContactWithUnread[] = [];
-    
+
     for (const contact of contacts) {
       const messages = await this.getMessagesByContactId(contact.id);
       const unreadMessages = messages.filter(
         (m) => m.direction === "inbound" && !m.isRead,
       );
-      const lastMessage = messages.length > 0 ? messages[messages.length - 1] : undefined;
-      
+      const lastMessage =
+        messages.length > 0 ? messages[messages.length - 1] : undefined;
+
       result.push({
         ...contact,
         unreadCount: unreadMessages.length,
@@ -217,7 +215,7 @@ class Database {
         lastMessageAt: lastMessage?.createdAt,
       });
     }
-    
+
     // Sort by last message time, most recent first
     return result.sort((a, b) => {
       if (a.lastMessageAt && b.lastMessageAt) {
@@ -234,17 +232,17 @@ class Database {
     messageData: Omit<Message, "id" | "createdAt" | "updatedAt">,
   ): Promise<Message> {
     const messages = await this.getCollection("messages");
-    
+
     const now = new Date();
     const messageDoc = {
       ...messageData,
       createdAt: now,
       updatedAt: now,
     };
-    
+
     const result = await messages.insertOne(messageDoc);
     const id = result.insertedId.toString();
-    
+
     return {
       id,
       ...messageData,
@@ -259,8 +257,8 @@ class Database {
       .find({ contactId })
       .sort({ createdAt: 1 })
       .toArray();
-    
-    return result.map(doc => ({
+
+    return result.map((doc) => ({
       id: doc._id.toString(),
       userId: doc.userId,
       contactId: doc.contactId,
@@ -278,8 +276,8 @@ class Database {
   async getMessagesByUserId(userId: string): Promise<Message[]> {
     const messages = await this.getCollection("messages");
     const result = await messages.find({ userId }).toArray();
-    
-    return result.map(doc => ({
+
+    return result.map((doc) => ({
       id: doc._id.toString(),
       userId: doc.userId,
       contactId: doc.contactId,
@@ -294,14 +292,17 @@ class Database {
     }));
   }
 
-  async updateMessage(id: string, updates: Partial<Message>): Promise<Message | undefined> {
+  async updateMessage(
+    id: string,
+    updates: Partial<Message>,
+  ): Promise<Message | undefined> {
     const messages = await this.getCollection("messages");
     const result = await messages.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: { ...updates, updatedAt: new Date() } },
-      { returnDocument: 'after' }
+      { returnDocument: "after" },
     );
-    
+
     if (result) {
       return {
         id: result._id.toString(),
@@ -335,7 +336,7 @@ class Database {
     numberData: Omit<PhoneNumber, "id" | "userId" | "createdAt" | "updatedAt">,
   ): Promise<PhoneNumber> {
     const phoneNumbers = await this.getCollection("phone_numbers");
-    
+
     const now = new Date();
     const numberDoc = {
       userId,
@@ -343,10 +344,10 @@ class Database {
       createdAt: now,
       updatedAt: now,
     };
-    
+
     const result = await phoneNumbers.insertOne(numberDoc);
     const id = result.insertedId.toString();
-    
+
     return {
       id,
       userId,
@@ -359,8 +360,8 @@ class Database {
   async getPhoneNumbersByUserId(userId: string): Promise<PhoneNumber[]> {
     const phoneNumbers = await this.getCollection("phone_numbers");
     const result = await phoneNumbers.find({ userId }).toArray();
-    
-    return result.map(doc => ({
+
+    return result.map((doc) => ({
       id: doc._id.toString(),
       userId: doc.userId,
       phoneNumber: doc.phoneNumber,
@@ -371,10 +372,12 @@ class Database {
     }));
   }
 
-  async getPhoneNumberByNumber(phoneNumber: string): Promise<PhoneNumber | undefined> {
+  async getPhoneNumberByNumber(
+    phoneNumber: string,
+  ): Promise<PhoneNumber | undefined> {
     const phoneNumbers = await this.getCollection("phone_numbers");
     const number = await phoneNumbers.findOne({ phoneNumber });
-    
+
     if (number) {
       return {
         id: number._id.toString(),
@@ -392,10 +395,13 @@ class Database {
   // Sub-account methods
   async createSubAccount(
     userId: string,
-    subAccountData: Omit<SubAccount, "id" | "userId" | "createdAt" | "updatedAt">,
+    subAccountData: Omit<
+      SubAccount,
+      "id" | "userId" | "createdAt" | "updatedAt"
+    >,
   ): Promise<SubAccount> {
     const subAccounts = await this.getCollection("sub_accounts");
-    
+
     const now = new Date();
     const subAccountDoc = {
       userId,
@@ -403,10 +409,10 @@ class Database {
       createdAt: now,
       updatedAt: now,
     };
-    
+
     const result = await subAccounts.insertOne(subAccountDoc);
     const id = result.insertedId.toString();
-    
+
     return {
       id,
       userId,
@@ -419,8 +425,8 @@ class Database {
   async getSubAccountsByUserId(userId: string): Promise<SubAccount[]> {
     const subAccounts = await this.getCollection("sub_accounts");
     const result = await subAccounts.find({ userId }).toArray();
-    
-        return result.map(doc => ({
+
+    return result.map((doc) => ({
       id: doc._id.toString(),
       userId: doc.userId,
       name: doc.name,
@@ -441,9 +447,9 @@ class Database {
     const result = await subAccounts.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: { ...updates, updatedAt: new Date() } },
-      { returnDocument: 'after' }
+      { returnDocument: "after" },
     );
-    
+
     if (result) {
       return {
         id: result._id.toString(),

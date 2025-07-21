@@ -8,7 +8,7 @@ export const sendSMS: RequestHandler = async (req, res) => {
     const { contactId, body, fromNumber } = req.body as SendSmsRequest;
     const userId = req.user!.id;
 
-        // Get contact
+    // Get contact
     const contact = await db.getContactById(contactId);
     if (!contact || contact.userId !== userId) {
       return res.status(404).json({ error: "Contact not found" });
@@ -27,7 +27,7 @@ export const sendSMS: RequestHandler = async (req, res) => {
       body,
     );
 
-        // Save message to database
+    // Save message to database
     const message = await db.createMessage({
       userId,
       contactId,
