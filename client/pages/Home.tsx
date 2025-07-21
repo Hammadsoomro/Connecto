@@ -135,39 +135,85 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Main Features Grid - Button Style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-slide-up">
+        {/* Navigation Buttons - Same size as logout */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8 animate-slide-up">
           {mainFeatures.map((feature) => {
             const Icon = feature.icon;
             return (
               <Link key={feature.title} to={feature.href}>
                 <Button 
-                                    size="lg"
-                  className={`w-full bg-gradient-to-r ${feature.color} hover:opacity-90 text-white border-0 text-lg px-8 py-6 rounded-xl group flex items-center justify-center space-x-3 transition-all duration-200 hover:scale-105`}
+                  variant="outline" 
+                  className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-black/20 text-black hover:bg-black/10'}`}
                 >
-                                    <Icon className="h-5 w-5" />
-                  <span className="font-semibold">{feature.title}</span>
-                  <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <Icon className="h-4 w-4" />
+                  <span>{feature.title}</span>
                 </Button>
               </Link>
             );
           })}
         </div>
 
+        {/* Dashboard Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up-delay">
+          {/* Wallet Balance */}
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
+                <CreditCard className="h-6 w-6 text-green-400" />
+              </div>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Wallet Balance</h3>
+              <p className="text-2xl font-bold text-green-400">$25.00</p>
+            </CardContent>
+          </Card>
+
+          {/* SMS Sent */}
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                <MessageSquare className="h-6 w-6 text-blue-400" />
+              </div>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>SMS Sent</h3>
+              <p className="text-2xl font-bold text-blue-400">1,247</p>
+            </CardContent>
+          </Card>
+
+          {/* Phone Numbers */}
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
+                <Phone className="h-6 w-6 text-purple-400" />
+              </div>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Phone Numbers</h3>
+              <p className="text-2xl font-bold text-purple-400">3</p>
+            </CardContent>
+          </Card>
+
+          {/* Sub Accounts */}
+          <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-4">
+                <Users className="h-6 w-6 text-orange-400" />
+              </div>
+              <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-2`}>Sub Accounts</h3>
+              <p className="text-2xl font-bold text-orange-400">1</p>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Quick Actions - Button Style */}
         <div className="mb-8 animate-slide-up-delay">
           <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-4 text-center`}>Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
+          <div className="flex justify-center gap-4">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
                   <Button 
-                    className={`w-full h-auto p-4 ${theme === 'dark' ? 'bg-white/10 hover:bg-white/20 text-white border-white/20' : 'bg-black/5 hover:bg-black/10 text-black border-black/20'} border flex items-center space-x-3 transition-all duration-200 hover:scale-105`}
+                    variant="outline"
+                    className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-black/20 text-black hover:bg-black/10'}`}
                   >
-                    <Icon className="h-5 w-5" />
-                    <span className="font-medium">{action.title}</span>
-                    <ChevronRight className="h-4 w-4 ml-auto" />
+                    <Icon className="h-4 w-4" />
+                    <span>{action.title}</span>
                   </Button>
                 </Link>
               );
