@@ -21,6 +21,7 @@ interface ContactListProps {
   contacts: ContactWithUnread[];
   selectedContact: Contact | null;
   onContactSelect: (contact: Contact) => void;
+  onContactDelete?: (contactId: string) => void;
   onClose?: () => void;
 }
 
