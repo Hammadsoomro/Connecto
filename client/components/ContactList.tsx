@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Contact, ContactWithUnread } from "@shared/types";
-import { Plus, Search, User, X, MessageCircle } from "lucide-react";
+import { Plus, Search, User, X, MessageCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AddContactDialog from "./AddContactDialog";
 
