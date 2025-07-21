@@ -128,8 +128,8 @@ export default function Dashboard() {
     return null;
   }
 
-  return (
-    <div className="h-screen flex flex-col">
+    return (
+    <div className={`h-screen flex flex-col ${theme === 'dark' ? 'bg-gradient-to-br from-black via-gray-900 to-black' : 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900'}`}>
             <ChatNavbar
         phoneNumbers={phoneNumbers}
         selectedPhoneNumber={selectedPhoneNumber}
