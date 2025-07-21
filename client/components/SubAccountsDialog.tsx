@@ -196,13 +196,25 @@ export default function SubAccountsDialog({
 
       <div className="space-y-4">
         {/* Add Sub Account */}
-        {isAdding ? (
+                {isAdding ? (
           <div className="p-4 border rounded-lg space-y-3">
             <Label>Add New Sub Account</Label>
             <Input
               value={newAccountName}
               onChange={(e) => setNewAccountName(e.target.value)}
               placeholder="Sub account name"
+            />
+            <Input
+              type="email"
+              value={newAccountEmail}
+              onChange={(e) => setNewAccountEmail(e.target.value)}
+              placeholder="Email address"
+            />
+            <Input
+              type="password"
+              value={newAccountPassword}
+              onChange={(e) => setNewAccountPassword(e.target.value)}
+              placeholder="Password"
             />
             <Select value={selectedNumber} onValueChange={setSelectedNumber}>
               <SelectTrigger>
