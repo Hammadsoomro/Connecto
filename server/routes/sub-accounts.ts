@@ -161,9 +161,63 @@ export const deleteSubAccount: RequestHandler = async (req, res) => {
       io.to(`user_${userId}`).emit("sub-account-deleted", subAccountId);
     }
 
-    res.json({ message: "Sub-account deleted successfully" });
+        res.json({ message: "Sub-account deleted successfully" });
   } catch (error) {
     console.error("Error deleting sub account:", error);
     res.status(500).json({ error: "Failed to delete sub account" });
+  }
+};
+
+export const loginSubAccount: RequestHandler = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find sub-account by email
+    const subAccounts = await db.getCollection("sub_accounts");
+    const subAccount = await subAccounts.findOne({ email });
+
+    if (!subAccount) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Check password
+    const isValidPassword = await bcrypt.compare(password, subAccount.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Generate JWT token for sub-account
+    const token = jwt.sign(
+      {
+        id: subAccount._id.toString(),
+        type: "sub-account",
+        parentUserId: subAccount.userId,
+        assignedNumber: subAccount.assignedNumber
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: "7d" }
+    );
+
+    // Return sub-account info (excluding password)
+    const subAccountResponse = {
+      id: subAccount._id.toString(),
+      userId: subAccount.userId,
+      name: subAccount.name,
+      email: subAccount.email,
+      friendlyName: subAccount.friendlyName,
+      status: subAccount.status,
+      assignedNumber: subAccount.assignedNumber,
+      createdAt: subAccount.createdAt,
+      updatedAt: subAccount.updatedAt,
+    };
+
+    res.json({
+      user: subAccountResponse,
+      token,
+      isSubAccount: true
+    });
+  } catch (error) {
+    console.error("Error logging in sub account:", error);
+    res.status(500).json({ error: "Login failed" });
   }
 };
