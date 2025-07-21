@@ -29,6 +29,7 @@ import {
   createSubAccount,
   updateSubAccount,
   deleteSubAccount,
+  loginSubAccount,
 } from "./routes/sub-accounts";
 
 import { db } from "./database";
