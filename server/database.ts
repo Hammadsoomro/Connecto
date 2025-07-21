@@ -498,12 +498,14 @@ class Database {
     const subAccounts = await this.getCollection("sub_accounts");
     const result = await subAccounts.find({ userId }).toArray();
     
-    return result.map(doc => ({
+        return result.map(doc => ({
       id: doc._id.toString(),
       userId: doc.userId,
       name: doc.name,
+      email: doc.email,
       friendlyName: doc.friendlyName,
       status: doc.status,
+      assignedNumber: doc.assignedNumber,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     }));
