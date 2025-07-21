@@ -104,9 +104,28 @@ export default function BuyNumbers() {
                 <Phone className="h-8 w-8 text-white" />
               </div>
               
-              <p className="text-gray-300">
-                Select from thousands of available phone numbers across different area codes
+                            <p className="text-gray-300">
+                Select from thousands of available phone numbers across different countries
               </p>
+
+              {/* Pricing Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <h3 className="font-semibold text-white mb-2">🇺🇸 United States</h3>
+                  <div className="text-sm text-gray-300 space-y-1">
+                    <p>Monthly: <span className="text-green-400">$2.50 - $3.50</span></p>
+                    <p>SMS: <span className="text-green-400">$0.01</span> per message</p>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <h3 className="font-semibold text-white mb-2">🇨🇦 Canada</h3>
+                  <div className="text-sm text-gray-300 space-y-1">
+                    <p>Monthly: <span className="text-green-400">$3.00 - $4.50</span></p>
+                    <p>SMS: <span className="text-green-400">$0.01</span> per message</p>
+                  </div>
+                </div>
+              </div>
               
               <Button 
                 onClick={() => setIsBuyNumberOpen(true)}
