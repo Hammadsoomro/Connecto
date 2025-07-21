@@ -141,15 +141,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
               </Button>
             </div>
 
-            <div className="mt-6 p-4 bg-purple-500/20 rounded-lg border border-purple-400/30">
-              <p className="text-sm text-purple-200 text-center">
-                <strong>Demo Account:</strong>
-                <br />
-                Email: demo@example.com
-                <br />
-                Password: password123
-              </p>
-            </div>
+            
           </CardContent>
         </Card>
       </div>
