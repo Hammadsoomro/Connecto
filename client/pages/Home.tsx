@@ -145,7 +145,7 @@ export default function Home() {
               <Button 
                 variant="outline" 
                 onClick={logout} 
-                className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/20 text-white hover:bg-white/10'}`}
+                className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}
               >
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
@@ -175,7 +175,7 @@ export default function Home() {
               <Link key={feature.title} to={feature.href}>
                 <Button 
                   variant="outline" 
-                  className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/20 text-white hover:bg-white/10'}`}
+                  className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{feature.title}</span>
@@ -283,7 +283,7 @@ export default function Home() {
                 <Link key={action.title} to={action.href}>
                   <Button 
                     variant="outline"
-                    className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/20 text-white hover:bg-white/10'}`}
+                    className={`flex items-center space-x-2 ${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}
                   >
                     <Icon className="h-4 w-4" />
                     <span>{action.title}</span>
