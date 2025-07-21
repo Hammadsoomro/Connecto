@@ -49,7 +49,7 @@ export default function ContactList({
           <div className="flex items-center gap-2">
             <Dialog open={isAddContactOpen} onOpenChange={setIsAddContactOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" variant="outline">
+                                <Button size="sm" variant="outline" className={`${theme === 'dark' ? 'border-white/20 text-white hover:bg-white/10' : 'border-white/30 bg-transparent text-white hover:bg-white/10 border-2'}`}>
                   <Plus className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
