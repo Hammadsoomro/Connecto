@@ -99,23 +99,23 @@
     min-height: 100vh;
   }
 
-  /* Light theme gradient pages */
+    /* Light theme gradient pages - purple background */
   .light .gradient-bg {
-    background: linear-gradient(
-      135deg,
-      rgb(241, 245, 249),
-      rgb(196, 181, 253),
-      rgb(241, 245, 249)
-    );
-  }
-
-  /* Dark theme gradient pages */
-  .dark .gradient-bg {
     background: linear-gradient(
       135deg,
       rgb(15, 23, 42),
       rgb(88, 28, 135),
       rgb(15, 23, 42)
+    );
+  }
+
+  /* Dark theme gradient pages - black background */
+  .dark .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      rgb(0, 0, 0),
+      rgb(17, 24, 39),
+      rgb(0, 0, 0)
     );
   }
 }
