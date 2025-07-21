@@ -128,11 +128,10 @@ export default function Dashboard() {
 
   return (
     <div className="h-screen flex flex-col">
-      <ChatNavbar
+            <ChatNavbar
         phoneNumbers={phoneNumbers}
         selectedPhoneNumber={selectedPhoneNumber}
         unreadCount={unreadData?.unreadCount || 0}
-                onToggleContactList={() => {}}
         onPhoneNumberSelect={setSelectedPhoneNumber}
         onNotificationMessageClick={handleNotificationMessageClick}
       />
