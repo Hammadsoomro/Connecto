@@ -129,7 +129,7 @@ interface ContactItemProps {
   onDelete?: (contactId: string) => void;
 }
 
-function ContactItem({ contact, isSelected, onSelect }: ContactItemProps) {
+function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemProps) {
   const formatLastMessage = (message: string) => {
     return message.length > 30 ? message.substring(0, 30) + "..." : message;
   };
