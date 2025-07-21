@@ -105,7 +105,7 @@ export default function Home() {
                 )}
               </Button>
               
-              <div className={`flex items-center space-x-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                            <div className={`flex items-center space-x-2 ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
                 <User className="h-4 w-4" />
                 <span className="text-sm font-medium">{user?.name}</span>
               </div>
