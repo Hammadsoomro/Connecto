@@ -209,14 +209,33 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          {/* Phone Numbers */}
+                    {/* Phone Numbers */}
           <Card className={`${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} backdrop-blur-sm`}>
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
-                <Phone className="h-6 w-6 text-purple-400" />
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                  <Phone className="h-6 w-6 text-purple-400" />
+                </div>
+                <p className="text-2xl font-bold text-purple-400">{phoneNumbers.length}</p>
               </div>
               <h3 className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-2`}>Phone Numbers</h3>
-              <p className="text-2xl font-bold text-purple-400">3</p>
+              <div className="space-y-1 text-sm">
+                {phoneNumbers.slice(0, 3).map((number) => (
+                  <div key={number.id} className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'}`}>
+                    {number.phoneNumber} {number.isPrimary && "⭐"}
+                  </div>
+                ))}
+                {phoneNumbers.length > 3 && (
+                  <div className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} text-xs`}>
+                    +{phoneNumbers.length - 3} more
+                  </div>
+                )}
+                {phoneNumbers.length === 0 && (
+                  <div className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-400'} text-xs`}>
+                    No numbers purchased
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 
