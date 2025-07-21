@@ -96,7 +96,7 @@ export default function Home() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className={`h-9 w-9 ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-black hover:bg-black/10'}`}
+                                className={`h-9 w-9 ${theme === 'dark' ? 'text-white hover:bg-white/10' : 'text-white hover:bg-white/10'}`}
               >
                 {theme === "dark" ? (
                   <Sun className="h-4 w-4" />
