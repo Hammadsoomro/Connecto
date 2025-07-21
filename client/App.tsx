@@ -92,9 +92,10 @@ function AuthenticatedApp() {
             <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={<Home />} />
             <Route path="/conversations" element={<Dashboard />} />
-            <Route path="/buy-numbers" element={<BuyNumbers />} />
+                        <Route path="/buy-numbers" element={<BuyNumbers />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/sub-accounts" element={<SubAccounts />} />
+            <Route path="/wallet" element={<Wallet />} />
             <Route path="/profile-settings" element={<Dashboard />} />
             <Route path="/account-settings" element={<Dashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
