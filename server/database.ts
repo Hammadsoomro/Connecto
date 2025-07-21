@@ -30,8 +30,7 @@ class Database {
       
       console.log("Connected to MongoDB successfully");
       
-      // Initialize with demo data if needed
-      await this.initializeDemoData();
+      
     } catch (error) {
       console.error("Failed to connect to MongoDB:", error);
       throw error;
