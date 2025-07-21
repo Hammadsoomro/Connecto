@@ -78,7 +78,7 @@ export default function Home() {
       </div>
 
       {/* Navigation Bar */}
-      <nav className={`relative z-10 border-b ${theme === 'dark' ? 'border-white/10 bg-black/20' : 'border-black/10 bg-white/20'} backdrop-blur supports-[backdrop-filter]:${theme === 'dark' ? 'bg-black/30' : 'bg-white/30'}`}>
+            <nav className={`relative z-10 border-b ${theme === 'dark' ? 'border-white/10 bg-black/20' : 'border-white/10 bg-black/20'} backdrop-blur supports-[backdrop-filter]:${theme === 'dark' ? 'bg-black/30' : 'bg-black/30'}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
