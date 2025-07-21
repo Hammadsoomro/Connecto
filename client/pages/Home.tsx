@@ -127,10 +127,10 @@ export default function Home() {
       <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8 text-center">
-          <h1 className={`text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-4 animate-fade-in`}>
+                    <h1 className={`text-4xl font-bold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-4 animate-fade-in`}>
             Welcome back, {user?.name}!
           </h1>
-          <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-600'} text-lg animate-fade-in-delay`}>
+          <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-300'} text-lg animate-fade-in-delay`}>
             Manage your SMS communications and phone numbers from your dashboard.
           </p>
         </div>
