@@ -202,7 +202,7 @@ export default function Home() {
 
         {/* Quick Actions - Button Style */}
         <div className="mb-8 animate-slide-up-delay">
-          <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-slate-900'} mb-4 text-center`}>Quick Actions</h2>
+                    <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-white'} mb-4 text-center`}>Quick Actions</h2>
           <div className="flex justify-center gap-4">
             {quickActions.map((action) => {
               const Icon = action.icon;
