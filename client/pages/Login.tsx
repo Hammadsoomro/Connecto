@@ -107,7 +107,7 @@ export default function LoginPage({ onSwitchToRegister }: LoginPageProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="password123"
+                                    placeholder="Enter your password"
                   className="bg-white/10 border-white/30 text-white placeholder:text-gray-400"
                 />
               </div>
