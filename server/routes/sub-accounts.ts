@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import bcrypt from "bcryptjs";
 import { db } from "../database";
 import { CreateSubAccountRequest } from "@shared/types";
 
@@ -16,7 +17,7 @@ export const getSubAccounts: RequestHandler = async (req, res) => {
 export const createSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
-    const { name, assignedNumber } = req.body as CreateSubAccountRequest;
+    const { name, email, password, assignedNumber } = req.body as CreateSubAccountRequest;
 
     // Check if user already has 3 sub-accounts
     const existingSubAccounts = await db.getSubAccountsByUserId(userId);
@@ -47,7 +48,17 @@ export const createSubAccount: RequestHandler = async (req, res) => {
       }
     }
 
-    const subAccount = await db.createSubAccount(userId, { name, assignedNumber, friendlyName: name, status: "active" });
+        // Hash password for sub-account
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const subAccount = await db.createSubAccount(userId, {
+      name,
+      email,
+      password: hashedPassword,
+      assignedNumber,
+      friendlyName: name,
+      status: "active"
+    });
 
     // Emit to Socket.IO for real-time updates
     const io = req.app.get("io");
@@ -66,7 +77,7 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
   try {
     const userId = req.user!.id;
     const { subAccountId } = req.params;
-    const { name, assignedNumber } = req.body;
+        const { name, email, password, assignedNumber } = req.body;
 
     // Check if sub-account exists and belongs to user
     const subAccounts = await db.getSubAccountsByUserId(userId);
@@ -99,8 +110,12 @@ export const updateSubAccount: RequestHandler = async (req, res) => {
       }
     }
 
-    const updateData: Partial<typeof subAccount> = {};
+        const updateData: Partial<typeof subAccount> = {};
     if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (password !== undefined) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
     if (assignedNumber !== undefined)
       updateData.assignedNumber = assignedNumber;
 
