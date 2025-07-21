@@ -153,10 +153,10 @@ function ContactItem({ contact, isSelected, onSelect, onDelete }: ContactItemPro
     }
   };
 
-  return (
+    return (
     <div
       className={cn(
-        "p-3 rounded-lg cursor-pointer transition-colors border",
+        "group p-3 rounded-lg cursor-pointer transition-colors border relative",
         "hover:bg-accent hover:text-accent-foreground",
         isSelected && "bg-accent text-accent-foreground border-purple-300",
         !isSelected && "border-transparent hover:border-border",
