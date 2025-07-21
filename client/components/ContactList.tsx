@@ -69,13 +69,13 @@ export default function ContactList({
         </div>
 
         {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <div className="relative">
+          <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-300'}`} />
           <Input
             placeholder="Search contacts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className={`pl-10 ${theme === 'dark' ? 'bg-white/10 border-white/20 text-white placeholder:text-gray-400' : 'bg-white/10 border-white/30 text-white placeholder:text-gray-300'}`}
           />
         </div>
       </div>
