@@ -85,8 +85,10 @@ export default function SubAccountsDialog({
         throw new Error(error.error || "Failed to create sub-account");
       }
 
-      await queryClient.invalidateQueries({ queryKey: ["sub-accounts"] });
+            await queryClient.invalidateQueries({ queryKey: ["sub-accounts"] });
       setNewAccountName("");
+      setNewAccountEmail("");
+      setNewAccountPassword("");
       setSelectedNumber("");
       setIsAdding(false);
       toast({
