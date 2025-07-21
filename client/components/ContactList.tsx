@@ -30,6 +30,7 @@ export default function ContactList({
   onContactSelect,
   onClose,
 }: ContactListProps) {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
 
