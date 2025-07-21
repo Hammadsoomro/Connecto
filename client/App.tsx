@@ -85,12 +85,12 @@ function AuthenticatedApp() {
   return (
     <ErrorBoundary>
       <SocketProvider>
-                                <BrowserRouter>
+                                        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/dashboard" element={<Home />} />
             <Route path="/conversations" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/buy-numbers" element={<BuyNumbers />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/sub-accounts" element={<SubAccounts />} />
