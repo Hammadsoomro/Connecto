@@ -1,0 +1,61 @@
+import path from "path";
+import { createServer } from "./index";
+import express from "express";
+import { db } from "./database";
+
+async function startServer() {
+  try {
+    const httpServer = await createServer();
+    const port = process.env.PORT || 3000;
+
+    // In production, serve the built SPA files
+    const __dirname = import.meta.dirname;
+    const distPath = path.join(__dirname, "../spa");
+
+    // Get the Express app from the HTTP server
+    const app = (httpServer as any)._events.request;
+
+    // Serve static files
+    app.use(express.static(distPath));
+
+    // Handle React Router - serve index.html for all non-API routes
+    app.get("*", (req: any, res: any) => {
+      // Don't serve index.html for API routes
+      if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
+        return res.status(404).json({ error: "API endpoint not found" });
+      }
+
+      res.sendFile(path.join(distPath, "index.html"));
+    });
+
+    httpServer.listen(port, () => {
+      console.log(`🚀 Fusion Starter server running on port ${port}`);
+      console.log(`📱 Frontend: http://localhost:${port}`);
+      console.log(`🔧 API: http://localhost:${port}/api`);
+      console.log(`💬 Socket.IO: Connected and ready for real-time messaging`);
+    });
+
+    // Graceful shutdown
+    process.on("SIGTERM", async () => {
+      console.log("🛑 Received SIGTERM, shutting down gracefully");
+      await db.disconnect();
+      httpServer.close(() => {
+        process.exit(0);
+      });
+    });
+
+    process.on("SIGINT", async () => {
+      console.log("🛑 Received SIGINT, shutting down gracefully");
+      await db.disconnect();
+      httpServer.close(() => {
+        process.exit(0);
+      });
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
